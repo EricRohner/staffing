@@ -24,9 +24,14 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
-    from . import auth, dashboard
+    from . import auth, dashboard, users, providers, customers
     app.register_blueprint(auth.bp)
     app.register_blueprint(dashboard.bp)
+    app.register_blueprint(users.bp)
+    app.register_blueprint(providers.bp)
+    app.register_blueprint(customers.bp)
+
+
 
     app.add_url_rule('/', endpoint='index')
 

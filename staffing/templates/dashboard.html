@@ -2,7 +2,22 @@
 {% block body %}  
     <div class="container-v">
         <h1>Welcome {{username}}</h1>
+
         <div class="container-h">
+            {% if is_user_admin %}
+                <a href="{{url_for('users.users')}}">
+                    Users
+                </a>
+            {% endif %}
+            <a href="{{url_for('providers.providers')}}">
+                Providers
+            </a>
+            <a href="{{url_for('customers.customers')}}">
+                Customers
+            </a>
+        </div>
+
+        <div class="container-v">
             {% if is_user_admin %}
                 <div>
                     You are a user admin.
