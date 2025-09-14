@@ -1,8 +1,36 @@
 {% extends "base.html" %}
-{% block body %}
-       
-    <div class="container">
+{% block body %}  
+    <div class="container-v">
         <h1>Welcome {{username}}</h1>
+        <div class="container-h">
+            {% if is_user_admin %}
+                <div>
+                    You are a user admin.
+                </div>
+            {% else %}
+                <div>
+                    You are not a user admin.
+                </div>
+            {% endif %}
+            {% if is_provider_admin %}
+                <div>
+                    You are a provider admin.
+                </div>
+            {% else %}
+                <div>
+                    You are not a provider admin.
+                </div>
+            {% endif %}
+            {% if is_customer_admin %}
+                <div>
+                    You are a customer admin.
+                </div>
+            {% else %}
+                <div>
+                    You are not a customer admin.
+                </div>
+            {% endif %}
+        </div>
         <a href="{{url_for('auth.logout')}}" class="btn btn-logout">Log out</a>
     </div>
 {% endblock %}

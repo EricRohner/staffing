@@ -1,0 +1,12 @@
+
+.container-v {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.container-h {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
