@@ -5,7 +5,6 @@ from .models import db
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev',
         SESSION_PERMANENT=False,
         SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.instance_path, 'staffing.db'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
@@ -13,8 +12,7 @@ def create_app(test_config=None):
     
     
     if test_config is None:
-        app.config.from_pyfile('config.py', silent=True)
-        #print("SECRET_KEY loaded:", app.config.get('SECRET_KEY'))
+        app.config.from_pyfile('config.py', silent=False)
     else:
         app.config.from_mapping(test_config)
     try:
