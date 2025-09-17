@@ -10,7 +10,6 @@ def create_app(test_config=None):
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
     )
     
-    
     if test_config is None:
         app.config.from_pyfile('config.py', silent=False)
     else:
@@ -29,8 +28,7 @@ def create_app(test_config=None):
     app.register_blueprint(providers.bp)
     app.register_blueprint(customers.bp)
 
-
-
     app.add_url_rule('/', endpoint='index')
-
+    
+    
     return app

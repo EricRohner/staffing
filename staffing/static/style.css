@@ -10,3 +10,7 @@
     flex-direction: row;
     gap: 1rem;
 }
+
+.flash {
+    color: #FF0000;
+}

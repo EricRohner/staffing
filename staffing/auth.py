@@ -8,10 +8,10 @@ bp = Blueprint ('auth', __name__)
 def index():
     return render_template('auth.html')
 
-@bp.route("/login", methods=["POST"])
+@bp.route('/login', methods=['POST'])
 def login():
-    username = request.form["username"]
-    password = request.form["password"]
+    username = request.form['username']
+    password = request.form['password']
     user = User.query.filter_by(username=username).first()
     if not user:
         flash("Username not found")
@@ -19,14 +19,14 @@ def login():
     if not user.check_password(password):
         flash("Incorrect password")
         return redirect(url_for('auth.index'))
-    session["username"] = user.username
-    session["is_user_admin"] = user.is_user_admin
-    session["is_provider_admin"] = user.is_provider_admin
-    session["is_customer_admin"] = user.is_customer_admin
+    session['username'] = user.username
+    session['is_user_admin'] = user.is_user_admin
+    session['is_provider_admin'] = user.is_provider_admin
+    session['is_customer_admin'] = user.is_customer_admin
 
     return redirect(url_for("dashboard.dashboard"))
 
-@bp.route("/logout")
+@bp.route('/logout')
 def logout():
     session.clear()
     flash("You have been logged out.")
@@ -35,8 +35,35 @@ def logout():
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if "username" not in session:
+        if 'username' not in session:
             flash("You have to be logged in")
+            return redirect(url_for('auth.index'))
+        return view(**kwargs)
+    return wrapped_view
+
+def user_admin_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if session['is_user_admin'] is not True:
+            flash("You must be a user admin")
+            return redirect(url_for('auth.index'))
+        return view(**kwargs)
+    return wrapped_view
+
+def provider_admin_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if session['is_provider_admin'] is not True:
+            flash("You must be a provider admin")
+            return redirect(url_for('auth.index'))
+        return view(**kwargs)
+    return wrapped_view
+
+def customer_admin_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if session['is_customer_admin'] is not True:
+            flash("You must be a customer admin")
             return redirect(url_for('auth.index'))
         return view(**kwargs)
     return wrapped_view

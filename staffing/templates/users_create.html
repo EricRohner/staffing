@@ -1,0 +1,26 @@
+{% extends "users.html" %}
+{% block form %}
+    <form class="form" method="post">
+
+    <label for="username">Username</label>
+    <input name="username" id="username" value="" required>
+
+    <label for="password">Password</label>
+    <input name="password" id="password" value="" required>
+
+    <label for="user_admin">User admin</label>
+    <input type="checkbox" name="user_admin" id="user_admin">
+
+    <label for="provider_admin">Provider admin</label>
+    <input type="checkbox" name="provider_admin" id="provider_admin">
+
+    <label for="customer_admin">Customer admin</label>
+    <input type="checkbox" name="customer_admin" id="customer_admin">
+
+    <input type="submit" value="Save">
+  </form>
+  <form action="/" method="get">
+    <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure?');">
+  </form>
+
+{% endblock %}
