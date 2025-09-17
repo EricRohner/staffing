@@ -1,10 +1,10 @@
 {% extends "base.html" %}
+
+{% block head %}
+<h1>Welcome {{session['username']}}</h1>
+{% endblock %}
+
 {% block body %}  
-    <div class="container-v">
-        <h1>Welcome {{session['username']}}</h1>
-
-        
-
         <div class="container-v">
             {% if session['is_user_admin'] %}
                 <div>
@@ -34,5 +34,4 @@
                 </div>
             {% endif %}
         </div>
-    </div>
 {% endblock %}

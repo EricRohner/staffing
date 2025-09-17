@@ -11,6 +11,10 @@
     gap: 1rem;
 }
 
+.button {
+  width: fit-content;
+}
+
 .flash {
     color: #FF0000;
 }

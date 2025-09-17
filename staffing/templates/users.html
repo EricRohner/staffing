@@ -1,8 +1,10 @@
 {% extends "base.html" %}
+
+{% block head %}
+<h1>Users</h1>
+{% endblock %}
+
 {% block body %}
-<h1>
-    Users
-</h1>
     <div class="container-h">
         {% if session['is_user_admin'] %}
             <a href="{{url_for('users.create')}}" class="create">

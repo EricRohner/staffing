@@ -9,24 +9,25 @@
     </head>
     <body>
         <header>Staffing management suite</header>
+
+        {% block head %}
+        {% endblock %}
         
         <div class="container-h">
+            <a href="{{url_for('dashboard.dashboard')}}">Dashboard</a>
+            
             {% if session['is_user_admin'] %}
-                <a href="{{url_for('users.users')}}">
-                    Users
-                </a>
+                <a href="{{url_for('users.users')}}">Users</a>
             {% endif %}
+
             {% if session['username'] %}
-            <a href="{{url_for('providers.providers')}}">
-                Providers
-            </a>
-            <a href="{{url_for('customers.customers')}}">
-                Customers
-            </a>
-            <a href="{{url_for('auth.logout')}}" class="logout">
-                Log out
-            </a>
+            <a href="{{url_for('providers.providers')}}">Providers</a>
+
+            <a href="{{url_for('customers.customers')}}">Customers</a>
+
+            <a href="{{url_for('auth.logout')}}" class="logout">Log out</a>
             {% endif %}
+            
         </div>
 
         {% for message in get_flashed_messages() %}

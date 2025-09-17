@@ -1,26 +1,29 @@
 {% extends "users.html" %}
 {% block form %}
-    <form class="form" method="post">
+    <form class="container-v" method="post">
+        <label>Username
+            <input name="username" id="username" value="" required>
+        </label>
 
-    <label for="username">Username</label>
-    <input name="username" id="username" value="" required>
+        <label>Password
+            <input name="password" id="password" value="" required>
+        </label>
 
-    <label for="password">Password</label>
-    <input name="password" id="password" value="" required>
+        <label>User admin
+            <input type="checkbox" name="user_admin" id="user_admin">
+        </label>
 
-    <label for="user_admin">User admin</label>
-    <input type="checkbox" name="user_admin" id="user_admin">
+        <label>Provider admin
+            <input type="checkbox" name="provider_admin" id="provider_admin">
+        </label>
 
-    <label for="provider_admin">Provider admin</label>
-    <input type="checkbox" name="provider_admin" id="provider_admin">
-
-    <label for="customer_admin">Customer admin</label>
-    <input type="checkbox" name="customer_admin" id="customer_admin">
-
-    <input type="submit" value="Save">
-  </form>
-  <form action="/" method="get">
-    <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure?');">
-  </form>
+        <label>Customer admin
+            <input type="checkbox" name="customer_admin" id="customer_admin">
+        </label>
+        <input class="button" type="submit" value="Save">
+    </form>
+    <form action="/" method="get">
+        <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure?');">
+    </form>
 
 {% endblock %}
