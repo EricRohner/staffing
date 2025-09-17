@@ -1,6 +1,7 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
@@ -11,6 +12,7 @@ class User(db.Model):
     is_user_admin = db.Column(db.Boolean, default=False)
     is_provider_admin = db.Column(db.Boolean, default=False)
     is_customer_admin = db.Column(db.Boolean, default=False)
+    created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

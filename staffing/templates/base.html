@@ -14,7 +14,9 @@
         {% endblock %}
         
         <div class="container-h">
+            {% if session['username'] %}
             <a href="{{url_for('dashboard.dashboard')}}">Dashboard</a>
+            {% endif %}
             
             {% if session['is_user_admin'] %}
                 <a href="{{url_for('users.users')}}">Users</a>
@@ -26,8 +28,7 @@
             <a href="{{url_for('customers.customers')}}">Customers</a>
 
             <a href="{{url_for('auth.logout')}}" class="logout">Log out</a>
-            {% endif %}
-            
+            {% endif %}  
         </div>
 
         {% for message in get_flashed_messages() %}

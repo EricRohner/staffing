@@ -8,7 +8,8 @@ bp = Blueprint ('users', __name__)
 @login_required
 @user_admin_required
 def users():
-        return render_template('users.html')
+        users = User.query.order_by(User.created.desc()).limit(10).all()
+        return render_template('users.html', users=users)
 
 @bp.route('/users/create', methods=('GET', 'POST'))
 @login_required
@@ -37,3 +38,17 @@ def create():
                         else:
                                 flash("User already exists")
         return render_template('users_create.html')
+
+@bp.route('/users/update/<string:id>', methods=('GET', 'POST'))
+@login_required
+@user_admin_required
+def update_user(id):
+        return "update user stub" + id
+
+@bp.route('/users/search', methods=('GET', 'POST'))
+@login_required
+@user_admin_required
+def user_search():
+        search_string = request.args.get('search_string', '')
+        users = User.query.filter(User.username.like(f"{search_string}%")).all()
+        return render_template('users.html', users=users)
