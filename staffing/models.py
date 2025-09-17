@@ -14,6 +14,9 @@ class User(db.Model):
     is_customer_admin = db.Column(db.Boolean, default=False)
     created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
+    def set_username(self, username):
+        self.username = username
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 

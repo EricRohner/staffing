@@ -52,6 +52,16 @@ def user_search():
 @user_admin_required
 def update_user(id):
         user = User.query.filter_by(id=id).first_or_404()
+        if request.method == "POST":
+                user.set_username(request.form['username'])
+                user.set_user_admin(bool(request.form.get('user_admin')))
+                user.set_provider_admin(bool(request.form.get('provider_admin')))
+                user.set_customer_admin(bool(request.form.get('customer_admin')))
+                db.session.commit()
+                flash("User updated.")
+                return redirect(url_for('users.users'))
+
+        user = User.query.filter_by(id=id).first_or_404()
         return render_template('users_update.html', user=user)
 
 @bp.route('/users/delete/<string:id>', methods=('GET', 'POST'))
