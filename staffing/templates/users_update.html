@@ -1,0 +1,27 @@
+{% extends "users.html" %}
+{% block form %}
+    <h2>Edit "{{ user['username'] }}"</h2>
+
+    <form class="container-v" method="post">
+        <label>Username
+            <input name="username" id="username" value="{{ user['username'] }}" required>
+        </label>
+
+        <label>User admin
+            <input type="checkbox" name="user_admin" id="user_admin" {% if user['is_user_admin'] %}checked{% endif %}>
+        </label>
+
+        <label>Provider admin
+            <input type="checkbox" name="provider_admin" id="provider_admin" {% if user['is_provider_admin'] %}checked{% endif %}>
+        </label>
+
+        <label>Customer admin
+            <input type="checkbox" name="customer_admin" id="customer_admin" {% if user['is_customer_admin'] %}checked{% endif %}>
+        </label>
+        <input class="button" type="submit" value="Save">
+    </form>
+    <form action="/" method="get">
+        <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure?');">
+    </form>
+
+{% endblock %}

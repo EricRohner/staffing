@@ -20,19 +20,17 @@
         {% endif %}
     </div>
 
+    <hr>
+
     {% for user in users %}
         <article class="user">
-        <header>
-            <div>
+        <header class="container-h">
             <h1>{{ user['username'] }}</h1>
             <div class="about">Created {{ user['created'].strftime('%Y-%m-%d') }}</div>
-            </div>
-            <a class="action" href="{{ url_for('users.update_user', id=user['username']) }}">Edit</a>
+            <a class="action" href="{{ url_for('users.update_user', id=user['id']) }}">Edit</a>
+            <a class="danger" onclick="return confirm('Are you sure?');" href="{{ url_for('users.delete_user', id=user['id']) }}">Delete</a>
         </header>
         </article>
-        {% if not loop.last %}
-        <hr>
-        {% endif %}
     {% endfor %}
 
     {% block form %}

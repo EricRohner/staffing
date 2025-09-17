@@ -10,9 +10,10 @@
     <body>
         <header>Staffing management suite</header>
 
-        {% block head %}
-        {% endblock %}
-        
+        {% for message in get_flashed_messages() %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+
         <div class="container-h">
             {% if session['username'] %}
             <a href="{{url_for('dashboard.dashboard')}}">Dashboard</a>
@@ -31,11 +32,13 @@
             {% endif %}  
         </div>
 
-        {% for message in get_flashed_messages() %}
-            <div class="flash">{{ message }}</div>
-        {% endfor %}
+        <hr>
+
+        {% block head %}
+        {% endblock %}
 
         {% block body %}
         {% endblock %}
+
     </body>
 </html>
