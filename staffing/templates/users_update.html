@@ -20,7 +20,7 @@
         </label>
         <input class="button" type="submit" value="Save">
     </form>
-    <form action="/" method="get">
+    <form action="{{ url_for('users.users') }}" method="get">
         <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure?');">
     </form>
 

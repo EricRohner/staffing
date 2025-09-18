@@ -6,6 +6,13 @@
 
 {% block body %}  
         <div class="container-v">
+            <form action="{{ url_for('dashboard.self_password_set') }}" method="get">
+                <input type="submit" value="Set Password" >
+            </form>
+
+            {% block pass_form%}
+            {% endblock %}
+
             {% if session['is_user_admin'] %}
                 <div>
                     You are a user admin.
@@ -34,4 +41,6 @@
                 </div>
             {% endif %}
         </div>
+
 {% endblock %}
+
