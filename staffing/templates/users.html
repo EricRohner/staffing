@@ -11,7 +11,7 @@
                 Create
             </a>
             
-            <form id="user_search" method="GET" action="{{ url_for('users.user_search') }}">
+            <form id="user_search" method="GET" action="{{ url_for('users.search') }}">
                 <label>Search users
                     <input name="search_string" id="search_string" value="" required>
                 </label>
@@ -25,10 +25,10 @@
     {% for user in users %}
         <article class="user">
         <header class="container-h">
-            <h1>{{ user['username'] }}</h1>
-            <div class="about">Created {{ user['created'].strftime('%Y-%m-%d') }}</div>
-            <a class="action" href="{{ url_for('users.update_user', id=user['id']) }}">Edit</a>
-            <a class="danger" onclick="return confirm('Are you sure?');" href="{{ url_for('users.delete_user', id=user['id']) }}">Delete</a>
+            <h1>{{ user['user_name'] }}</h1>
+            <div class="about">Most recent update: {{ user['last_edited'].strftime('%Y-%m-%d') }}</div>
+            <a class="action" href="{{ url_for('users.update', id=user['id']) }}">Edit</a>
+            <a class="danger" onclick="return confirm('Are you sure?');" href="{{ url_for('users.delete', id=user['id']) }}">Delete</a>
         </header>
         </article>
     {% endfor %}

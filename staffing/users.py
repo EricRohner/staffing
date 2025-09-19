@@ -1,6 +1,7 @@
 from flask import Blueprint, flash, session, redirect, render_template, request, url_for
+from datetime import datetime, timezone
 from .auth import login_required, user_admin_required
-from staffing.models import db, User
+from .models import db, User
 
 bp = Blueprint ('users', __name__)
 
@@ -8,7 +9,7 @@ bp = Blueprint ('users', __name__)
 @login_required
 @user_admin_required
 def users():
-        users = User.query.order_by(User.created.desc()).limit(10).all()
+        users = User.query.order_by(User.last_edited.desc()).limit(10).all()
         return render_template('users.html', users=users)
 
 @bp.route('/users/create', methods=('GET', 'POST'))
@@ -16,8 +17,8 @@ def users():
 @user_admin_required
 def create():
         if request.method == 'POST':
-                if not User.query.filter_by(username=request.form['username']).first():
-                        new_user = User(username=request.form['username'])
+                if not User.query.filter_by(user_name=request.form['user_name']).first():
+                        new_user = User(user_name=request.form['user_name'])
                         new_user.set_password(request.form['password'])  
                         new_user.is_user_admin=bool(request.form.get('user_admin'))
                         new_user.is_provider_admin=bool(request.form.get('provider_admin'))
@@ -32,25 +33,26 @@ def create():
 @bp.route('/users/search', methods=('GET', 'POST'))
 @login_required
 @user_admin_required
-def user_search():
+def search():
         search_string = request.args.get('search_string', '')
-        users = User.query.filter(User.username.like(f"{search_string}%")).all()
+        users = User.query.filter(User.user_name.like(f"{search_string}%")).all()
         return render_template('users.html', users=users)
 
 @bp.route('/users/update/<string:id>', methods=('GET', 'POST'))
 @login_required
 @user_admin_required
-def update_user(id):
+def update(id):
         user = User.query.filter_by(id=id).first()
         if request.method == "POST":
-                collision = User.query.filter_by(username=request.form['username']).first()
+                collision = User.query.filter_by(user_name=request.form['user_name']).first()
                 if collision and collision.id != user.id:
-                        flash("Username must be unique.")
+                        flash("User name must be unique.")
                         return redirect(url_for('users.users'))
-                user.username=request.form['username']
+                user.user_name=request.form['user_name']
                 user.is_user_admin=bool(request.form.get('user_admin'))
                 user.is_provider_admin=bool(request.form.get('provider_admin'))
                 user.is_customer_admin=bool(request.form.get('customer_admin'))
+                user.last_edited=datetime.now(timezone.utc)
                 db.session.commit()
                 flash("User updated.")
                 return redirect(url_for('users.users'))
@@ -61,12 +63,15 @@ def update_user(id):
 @bp.route('/users/delete/<string:id>', methods=('GET', 'POST'))
 @login_required
 @user_admin_required
-def delete_user(id):
-        user = User.query.filter_by(id=id).first_or_404()
-        if user.username == session['username']:
+def delete(id):
+        user = User.query.filter_by(id=id).first()
+        if not user:
+                flash("User not found")
+                return redirect(url_for('users.users'))
+        if user.user_name == session['user_name']:
                 flash("You can't delete yourself")
                 return redirect(url_for('users.users'))
         db.session.delete(user)
         db.session.commit()
-        flash(f"User '{user.username}' has been deleted.")
+        flash(f"User '{user.user_name}' has been deleted.")
         return redirect(url_for('users.users'))

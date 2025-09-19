@@ -13,7 +13,7 @@ def dashboard():
 @login_required
 def self_password_set():
         if request.method == 'POST':
-                user = User.query.filter_by(username=session['username']).first()
+                user = User.query.filter_by(user_name=session['user_name']).first()
                 if request.form.get('new_password') != request.form.get('repeat_new_password'):
                         flash("New password and repeat new password must match.")
                         return redirect(url_for('dashboard.dashboard'))

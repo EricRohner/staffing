@@ -1,10 +1,10 @@
 {% extends "users.html" %}
 {% block form %}
-    <h2>Edit "{{ user['username'] }}"</h2>
+    <h2>Edit "{{ user['user_name'] }}"</h2>
 
     <form class="container-v" method="post">
-        <label>Username
-            <input name="username" id="username" value="{{ user['username'] }}" required>
+        <label>User name
+            <input name="user_name" id="user_name" value="{{ user['user_name'] }}" required>
         </label>
 
         <label>User admin

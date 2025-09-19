@@ -10,16 +10,16 @@ def index():
 
 @bp.route('/login', methods=['POST'])
 def login():
-    username = request.form['username']
+    user_name = request.form['user_name']
     password = request.form['password']
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter_by(user_name=user_name).first()
     if not user:
-        flash("Username not found")
+        flash("User name not found")
         return redirect(url_for('auth.index'))
     if not user.check_password(password):
         flash("Incorrect password")
         return redirect(url_for('auth.index'))
-    session['username'] = user.username
+    session['user_name'] = user.user_name
     session['is_user_admin'] = user.is_user_admin
     session['is_provider_admin'] = user.is_provider_admin
     session['is_customer_admin'] = user.is_customer_admin
@@ -35,7 +35,7 @@ def logout():
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if 'username' not in session:
+        if 'user_name' not in session:
             flash("You have to be logged in")
             return redirect(url_for('auth.index'))
         return view(**kwargs)
