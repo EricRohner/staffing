@@ -16,17 +16,17 @@
 
         <div class="container-h">
             {% if session['user_name'] %}
-            <a href="{{url_for('dashboard.dashboard')}}">Dashboard</a>
+            <a href="{{url_for('dashboard.index')}}">Dashboard</a>
             {% endif %}
             
             {% if session['is_user_admin'] %}
-                <a href="{{url_for('users.users')}}">Users</a>
+                <a href="{{url_for('users.index')}}">Users</a>
             {% endif %}
 
             {% if session['user_name'] %}
-            <a href="{{url_for('providers.providers')}}">Providers</a>
+            <a href="{{url_for('providers.index')}}">Providers</a>
 
-            <a href="{{url_for('customers.customers')}}">Customers</a>
+            <a href="{{url_for('customers.index')}}">Customers</a>
 
             <a href="{{url_for('auth.logout')}}" class="logout">Log out</a>
             {% endif %}  

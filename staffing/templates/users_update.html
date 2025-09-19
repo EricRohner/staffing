@@ -18,10 +18,10 @@
         <label>Customer admin
             <input type="checkbox" name="customer_admin" id="customer_admin" {% if user['is_customer_admin'] %}checked{% endif %}>
         </label>
-        <input class="button" type="submit" value="Save">
-    </form>
-    <form action="{{ url_for('users.users') }}" method="get">
-        <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure?');">
+        <div class="container-h">
+            <input class="button" type="submit" value="Save">
+            <input class="danger" type="submit" value="Cancel" action="{{ url_for('users.index') }}" method="get" onclick="return confirm('Are you sure?');">
+        </div>
     </form>
 
 {% endblock %}

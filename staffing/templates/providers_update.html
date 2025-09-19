@@ -1,0 +1,20 @@
+{% extends "providers.html" %}
+{% block form %}
+    <h2>Edit "{{ provider['provider_name'] }}"</h2>
+
+    <form class="container-v" method="post">
+        <label>Provider name
+            <input name="provider_name" value="{{ provider['provider_name'] }}" required>
+        </label>
+    
+    <label>Provider email
+            <input name="provider_email" value="{{ provider['provider_email'] }}" required>
+    </label>
+        
+        <div class="container-h">
+            <input class="button" type="submit" value="Save">
+            <input class="danger" type="submit" value="Cancel" action="{{ url_for('providers.index') }}" method="get" onclick="return confirm('Are you sure?');">
+        </div>
+    </form>
+
+{% endblock %}

@@ -8,7 +8,7 @@ bp = Blueprint ('users', __name__)
 @bp.route('/users')
 @login_required
 @user_admin_required
-def users():
+def index():
         users = User.query.order_by(User.last_edited.desc()).limit(10).all()
         return render_template('users.html', users=users)
 
@@ -25,7 +25,7 @@ def create():
                         new_user.is_customer_admin=bool(request.form.get('customer_admin'))
                         db.session.add(new_user)
                         db.session.commit()
-                        return redirect(url_for('users.users'))
+                        return redirect(url_for('users.index'))
                 else:
                         flash("User already exists")
         return render_template('users_create.html')
@@ -43,11 +43,14 @@ def search():
 @user_admin_required
 def update(id):
         user = User.query.filter_by(id=id).first()
+        if not user:
+                flash("User not found")
+                return redirect(url_for('users.index'))
         if request.method == "POST":
                 collision = User.query.filter_by(user_name=request.form['user_name']).first()
                 if collision and collision.id != user.id:
                         flash("User name must be unique.")
-                        return redirect(url_for('users.users'))
+                        return redirect(url_for('users.index'))
                 user.user_name=request.form['user_name']
                 user.is_user_admin=bool(request.form.get('user_admin'))
                 user.is_provider_admin=bool(request.form.get('provider_admin'))
@@ -55,9 +58,8 @@ def update(id):
                 user.last_edited=datetime.now(timezone.utc)
                 db.session.commit()
                 flash("User updated.")
-                return redirect(url_for('users.users'))
+                return redirect(url_for('users.index'))
 
-        user = User.query.filter_by(id=id).first_or_404()
         return render_template('users_update.html', user=user)        
 
 @bp.route('/users/delete/<string:id>', methods=('GET', 'POST'))
@@ -67,11 +69,11 @@ def delete(id):
         user = User.query.filter_by(id=id).first()
         if not user:
                 flash("User not found")
-                return redirect(url_for('users.users'))
+                return redirect(url_for('users.index'))
         if user.user_name == session['user_name']:
                 flash("You can't delete yourself")
-                return redirect(url_for('users.users'))
+                return redirect(url_for('users.index'))
         db.session.delete(user)
         db.session.commit()
         flash(f"User '{user.user_name}' has been deleted.")
-        return redirect(url_for('users.users'))
+        return redirect(url_for('users.index'))

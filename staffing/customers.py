@@ -5,5 +5,5 @@ bp = Blueprint ('customers', __name__)
 
 @bp.route('/customers')
 @login_required
-def customers():
+def index():
         return render_template('customers.html')

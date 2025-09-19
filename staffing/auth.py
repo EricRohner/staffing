@@ -24,7 +24,7 @@ def login():
     session['is_provider_admin'] = user.is_provider_admin
     session['is_customer_admin'] = user.is_customer_admin
 
-    return redirect(url_for("dashboard.dashboard"))
+    return redirect(url_for("dashboard.index"))
 
 @bp.route('/logout')
 def logout():
@@ -46,7 +46,7 @@ def user_admin_required(view):
     def wrapped_view(**kwargs):
         if session['is_user_admin'] is not True:
             flash("You must be a user admin")
-            return redirect(url_for('auth.index'))
+            return redirect(url_for('users.index'))
         return view(**kwargs)
     return wrapped_view
 
@@ -55,7 +55,7 @@ def provider_admin_required(view):
     def wrapped_view(**kwargs):
         if session['is_provider_admin'] is not True:
             flash("You must be a provider admin")
-            return redirect(url_for('auth.index'))
+            return redirect(url_for('providers.index'))
         return view(**kwargs)
     return wrapped_view
 
@@ -64,6 +64,6 @@ def customer_admin_required(view):
     def wrapped_view(**kwargs):
         if session['is_customer_admin'] is not True:
             flash("You must be a customer admin")
-            return redirect(url_for('auth.index'))
+            return redirect(url_for('customers.index'))
         return view(**kwargs)
     return wrapped_view

@@ -2,28 +2,29 @@
 {% block form %}
     <form class="container-v" method="post">
         <label>User name
-            <input name="user_name" id="user_name" value="" required>
+            <input name="user_name" value="" required>
         </label>
 
         <label>Password
-            <input name="password" id="password" value="" type="password" required>
+            <input name="password" value="" type="password" required>
         </label>
 
         <label>User admin
-            <input type="checkbox" name="user_admin" id="user_admin">
+            <input type="checkbox" name="user_admin">
         </label>
 
         <label>Provider admin
-            <input type="checkbox" name="provider_admin" id="provider_admin">
+            <input type="checkbox" name="provider_admin">
         </label>
 
         <label>Customer admin
-            <input type="checkbox" name="customer_admin" id="customer_admin">
+            <input type="checkbox" name="customer_admin">
         </label>
-        <input class="button" type="submit" value="Save">
+        <div class="container-h">
+            <input class="button" type="submit" value="Save">
+            <input class="danger" type="submit" value="Cancel" action="{{ url_for('users.index') }}" method="get" onclick="return confirm('Are you sure?');">
+        </div>
     </form>
-    <form action="{{ url_for('users.users') }}" method="get">
-        <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure?');">
-    </form>
+        
 
 {% endblock %}
