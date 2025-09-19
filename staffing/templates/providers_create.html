@@ -1,7 +1,7 @@
 {% extends "providers.html" %}
 {% block form %}
     <form class="container-v" method="post">
-        <label>User name
+        <label>Provider name
             <input name="provider_name" id="provider_name" value="" required>
         </label>
 
@@ -9,10 +9,10 @@
             <input name="provider_email" id="provider_email" value="" required>
         </label>
 
-        <input class="button" type="submit" value="Save">
-    </form>
-    <form action="{{ url_for('providers.index') }}" method="get">
-        <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure?');">
+        <div class="container-h">
+            <input class="button" type="submit" value="Save">
+            <input class="danger" type="submit" value="Cancel" action="{{ url_for('providers.index') }}" method="get" onclick="return confirm('Are you sure?');">
+        </div>
     </form>
 
 {% endblock %}

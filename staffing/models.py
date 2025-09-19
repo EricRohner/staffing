@@ -31,6 +31,6 @@ class Provider(db.Model):
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String(25), unique=True, nullable=False)
-    address = db.Column(db.String(25), nullable=False)
+    customer_address = db.Column(db.String(25), nullable=False)
     created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))

@@ -1,0 +1,18 @@
+{% extends "customers.html" %}
+{% block form %}
+    <form class="container-v" method="post">
+        <label>Customer name
+            <input name="customer_name" value="" required>
+        </label>
+
+        <label>Customer address
+            <input name="customer_address" value="" required>
+        </label>
+
+        <div class="container-h">
+            <input class="button" type="submit" value="Save">
+            <input class="danger" type="submit" value="Cancel" action="{{ url_for('customers.index') }}" method="get" onclick="return confirm('Are you sure?');">
+        </div>
+    </form>
+
+{% endblock %}

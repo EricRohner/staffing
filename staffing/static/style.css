@@ -1,4 +1,8 @@
 
+* {
+    font-family: Helvetica;
+}
+
 .container-v {
     display: flex;
     flex-direction: column;

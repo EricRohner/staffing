@@ -35,7 +35,12 @@ def create():
 @user_admin_required
 def search():
         search_string = request.args.get('search_string', '')
-        users = User.query.filter(User.user_name.like(f"{search_string}%")).all()
+        users = User.query.filter(
+                User.user_name.like(f"{search_string}%")
+        ).order_by(
+                User.user_name != search_string,
+                User.user_name.asc()
+        ).all()
         return render_template('users.html', users=users)
 
 @bp.route('/users/update/<string:id>', methods=('GET', 'POST'))
@@ -60,7 +65,24 @@ def update(id):
                 flash("User updated.")
                 return redirect(url_for('users.index'))
 
-        return render_template('users_update.html', user=user)        
+        return render_template('users_update.html', user=user)  
+
+@bp.route('/users/set_password/<string:id>', methods=('GET', 'POST'))
+@login_required
+@user_admin_required
+def set_password(id):
+        user = User.query.filter_by(id=id).first()
+        if not user:
+                flash("User not found")
+                return redirect(url_for('users.index'))
+        if request.method == "POST":
+                user.set_password(request.form['new_password'])
+                user.last_edited=datetime.now(timezone.utc)
+                db.session.commit()
+                flash(f"Password updated for {user.user_name}.")
+                return redirect(url_for('users.index'))
+
+        return render_template('users_set_password.html', user=user)      
 
 @bp.route('/users/delete/<string:id>', methods=('GET', 'POST'))
 @login_required
@@ -75,5 +97,5 @@ def delete(id):
                 return redirect(url_for('users.index'))
         db.session.delete(user)
         db.session.commit()
-        flash(f"User '{user.user_name}' has been deleted.")
+        flash(f"User {user.user_name} has been deleted.")
         return redirect(url_for('users.index'))

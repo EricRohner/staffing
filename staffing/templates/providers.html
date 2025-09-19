@@ -9,9 +9,9 @@
         {% if session['is_provider_admin'] %}
             <a href="{{url_for('providers.create')}}" class="create">Create</a>
         {% endif %}
-            <form id="provider_search" method="GET" action="{{ url_for('providers.search') }}">
+            <form method="GET" action="{{ url_for('providers.search') }}">
                 <label>Search providers
-                    <input name="search_string" id="search_string" value="" required>
+                    <input name="search_string" value="" required>
                 </label>
                 <input class="button" type="submit" value="Search">
             </form>
