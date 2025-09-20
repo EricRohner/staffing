@@ -14,10 +14,8 @@ class User(db.Model):
     is_customer_admin = db.Column(db.Boolean, default=False)
     created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
-
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
@@ -34,3 +32,14 @@ class Customer(db.Model):
     customer_address = db.Column(db.String(25), nullable=False)
     created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+
+class Job(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    job_title = db.Column(db.String(25), nullable=False)
+    created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
+    Provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'), nullable=True)
+    provider = db.relationship('Provider', backref=db.backref('jobs'))
+    customer = db.relationship('Customer', backref=db.backref('jobs'))

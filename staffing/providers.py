@@ -36,7 +36,7 @@ def search():
                 )).order_by(
                         Provider.provider_email != search_string,
                         Provider.provider_name != search_string,
-                        Provider.provider_name.asc()
+                        Provider.provider_email.asc()
                 ).all()
         return render_template('providers.html', providers=providers)
 

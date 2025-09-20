@@ -23,6 +23,7 @@ def self_password_set():
                         flash("Password set")
                         return redirect(url_for('dashboard.index'))
                 else:
-                        flash("Current password incorrect.")
+                        if not request.form.get('cancel'):
+                                flash("Current password incorrect.")
                         return redirect(url_for('dashboard.index'))
         return render_template('dashboard_self_password_set.html')
