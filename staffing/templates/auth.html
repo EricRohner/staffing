@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block head %}
-<h1>Welcome</h1>
+<div class="block log_out fill_w">Welcome</div>
 {% endblock %}
 
 {% block body %}    
-    <div class="container">
+    <div class="container-h">
         <form id="auth-form" action="{{url_for('auth.login')}}" method="post">
             <input type="text" name="user_name" placeholder="User name" class="input-field"/>
             <input type="password" name="password" placeholder="Password" class="input-field"/>

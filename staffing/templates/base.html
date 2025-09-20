@@ -8,7 +8,7 @@
         <title>Staffing</title>
     </head>
     <body>
-        <header>Staffing management suite</header>
+        <div class="color0 fill_w">Staffing management suite</div>
 
         {% for message in get_flashed_messages() %}
             <div class="flash">{{ message }}</div>
@@ -16,23 +16,21 @@
 
         <div class="container-h">
             {% if session['user_name'] %}
-            <a href="{{url_for('dashboard.index')}}">Dashboard</a>
+            <a class="block color1" href="{{url_for('dashboard.index')}}">Dashboard</a>
             {% endif %}
             
             {% if session['is_user_admin'] %}
-                <a href="{{url_for('users.index')}}">Users</a>
+                <a class="block color2" href="{{url_for('users.index')}}">Users</a>
             {% endif %}
 
             {% if session['user_name'] %}
-            <a href="{{url_for('providers.index')}}">Providers</a>
+            <a class="block color3" href="{{url_for('providers.index')}}">Providers</a>
 
-            <a href="{{url_for('customers.index')}}">Customers</a>
+            <a class="block color4" href="{{url_for('customers.index')}}">Customers</a>
 
-            <a href="{{url_for('auth.logout')}}" class="logout">Log out</a>
+            <a class="block color5 fill_w" href="{{url_for('auth.logout')}}" class="logout">Log out</a>
             {% endif %}  
         </div>
-
-        <hr>
 
         {% block head %}
         {% endblock %}

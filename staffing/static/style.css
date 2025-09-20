@@ -1,25 +1,81 @@
-
+/*All*/
 * {
     font-family: Helvetica;
 }
 
+/*directions*/
+
 .container-v {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
 }
 
 .container-h {
     display: flex;
     flex-direction: row;
-    gap: 1rem;
     align-items: flex-end
+}
+
+/*sizing*/
+
+a, input {
+    font-size: 16px;
+}
+
+.big {
+    font-size: 2em;
+}
+
+.fill_w {
+    width: 100%
 }
 
 .button {
   width: fit-content;
 }
 
+/*Fill and shape*/
+
+.white_textbox {
+    background-color: white;
+    font-size: 12px;
+}
+
+.block {
+    text-decoration: none;
+    color: black;
+    padding: 16px 16px;
+    display: inline-block;
+    border: none;
+    border-radius: 0;
+}
+
+/*Colors*/
+
 .flash {
     color: #FF0000;
+}
+
+.color0 {
+    background-color: #7BAAA8;
+}
+
+.color1 {
+    background-color: #A3B49F;
+}
+
+.color2 {
+    background-color: #C2A383;
+}
+
+.color3 {
+    background-color: #D19C7C;
+}
+
+.color4 {
+    background-color: #E1B899;
+}
+
+.color5 {
+    background-color: #A89CA3;
 }
