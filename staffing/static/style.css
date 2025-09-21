@@ -22,10 +22,6 @@ a, input {
     font-size: 16px;
 }
 
-.big {
-    font-size: 2em;
-}
-
 .fill_w {
     width: 100%
 }
@@ -57,25 +53,25 @@ a, input {
 }
 
 .color0 {
-    background-color: #7BAAA8;
+    background-color: #eeeee8;
 }
 
 .color1 {
-    background-color: #A3B49F;
+    background-color: #358bb3;
 }
 
 .color2 {
-    background-color: #C2A383;
+    background-color: #e0975f;
 }
 
 .color3 {
-    background-color: #D19C7C;
+    background-color: #eab676;
 }
 
 .color4 {
-    background-color: #E1B899;
+    background-color: #76b5c5;
 }
 
 .color5 {
-    background-color: #A89CA3;
+    background-color: #995239;
 }

@@ -1,0 +1,22 @@
+{% extends "customer_jobs.html" %}
+
+{% block provider_search %}
+    <hr>
+    <form method="POST" action="{{ url_for('customers.customer_job_find_provider', customer_id = customer.id, job_id = jobs[0].id ) }}">
+        <input name="search_string" value="" required>
+        <input class="block color3" type="submit" value="Search">
+    </form>
+
+{% for provider in providers %}
+        <article class="provider">
+        <header class="container-h">
+            <h1>{{ provider['provider_name'] }}</h1>
+            <div class="container-v">
+                <div class="email">{{ provider['provider_email'] }}</div>
+            </div>
+            <a href="{{ url_for('customers.customer_job_assign_provider', customer_id=customer['id'], job_id=jobs[0].id, provider_id=provider['id']) }}">Assign to job</a>
+        </header>
+        </article>
+    {% endfor %}
+
+{% endblock %}

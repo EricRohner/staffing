@@ -1,19 +1,13 @@
 {% extends "base.html" %}
 
-{% block head %}
-<div class="big block color4 fill_w">Customers</div>
-{% endblock %}
-
 {% block body %}
-    <div class="container-h">
+    <div class="container-h color4">
         {% if session['is_customer_admin'] %}
-            <a href="{{url_for('customers.create')}}" class="create">Create</a>
+            <a class="block color4" href="{{ url_for("customers.create") }}">Create</a>
         {% endif %}
             <form method="GET" action="{{ url_for('customers.search') }}">
-                <label>Search customers
                     <input name="search_string" value="" required>
-                </label>
-                <input class="button" type="submit" value="Search">
+                <input class="block color4" type="submit" value="Search">
             </form>
     </div>
 
@@ -27,10 +21,10 @@
                 <div class="address">{{ customer['customer_address'] }}</div>
                 <div class="updated">Most recent update: {{ customer['last_edited'].strftime('%Y-%m-%d') }}</div>
             </div>
-            <a class="action" href="{{ url_for('customers.customer_jobs', id=customer['id']) }}">Jobs</a>
+            <a class="action" href="{{ url_for('customers.customer_jobs', customer_id=customer['id']) }}">Jobs</a>
             {% if session['is_customer_admin'] %}
-                <a class="action" href="{{ url_for('customers.update', id=customer['id']) }}">Edit</a>
-                <a class="danger" onclick="return confirm('Are you sure?');" href="{{ url_for('customers.delete', id=customer['id']) }}">Delete</a>
+                <a class="action" href="{{ url_for('customers.update', customer_id=customer['id']) }}">Edit</a>
+                <a class="danger" onclick="return confirm('Are you sure?');" href="{{ url_for('customers.delete', customer_id=customer['id']) }}">Delete</a>
             {% endif %}
         </header>
         </article>

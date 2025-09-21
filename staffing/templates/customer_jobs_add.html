@@ -3,11 +3,12 @@
     <form class="container-v" method="post">
         <label>Job title
             <input name="job_title" value="" required>
+            <input name="job_start_date" type="date" required>
         </label>
 
         <div class="container-h">
             <input class="button" type="submit" value="Save">
-            <input class="danger" type="submit" value="Cancel" action="{{ url_for('customers.customer_jobs', id = customer.id) }}" method="get" onclick="return confirm('Are you sure?');">
+            <input class="danger" type="submit" value="Cancel" action="{{ url_for('customers.customer_jobs', customer_id = customer.id) }}" method="get" onclick="return confirm('Are you sure?');">
         </div>
     </form>
 {% endblock %}

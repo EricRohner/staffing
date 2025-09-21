@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <div class="container-h">
+    <div class="container-h color2">
         {% if session['is_user_admin'] %}
             <a class="block color2" href="{{url_for('users.create')}}" class="create">
                 Create
             </a>
             
             <form id="user_search" method="GET" action="{{ url_for('users.search') }}">
-                    <input class="block color2" name="search_string" id="search_string" value="" required>
-                <input class="button" type="submit" value="Search">
+                    <input name="search_string" id="search_string" value="" required>
+                <input class="block color2" type="submit" value="Search">
             </form>
         {% endif %}
     </div>
