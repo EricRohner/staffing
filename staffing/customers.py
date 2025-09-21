@@ -105,7 +105,7 @@ def customer_job_find_provider(customer_id, job_id):
         job = Job.query.filter_by(id = job_id).first()
         providers = []
         if request.method == "POST":
-                search_string = request.args.get('search_string', '')
+                search_string = request.form.get('search_string')
                 providers = Provider.query.filter(
                         db.or_(Provider.provider_name.like(f"{search_string}%"),
                                 Provider.provider_email.like(f"{search_string}%")
