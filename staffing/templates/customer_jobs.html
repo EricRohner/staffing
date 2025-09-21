@@ -22,10 +22,8 @@
         <article class="job container-h">
             <h1>{{ job['job_title'] }}</h1>
             <div>{{ job['job_start_date'] }}
-                {% if job.Provider_id %}
-                </div>
-                    job[Provider_id]
-                </div>
+                {% if job.provider_id %}
+                    <div>Provider: {{ job.provider.provider_name }}</div>
                 {% endif %}
             <a href="{{ url_for('customers.customer_job_find_provider', customer_id=customer['id'], job_id=job['id']) }}">find a provider</a>
         </article>

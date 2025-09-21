@@ -41,6 +41,6 @@ class Job(db.Model):
     last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
-    Provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'), nullable=True)
+    provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'), nullable=True)
     provider = db.relationship('Provider', backref=db.backref('jobs'))
     customer = db.relationship('Customer', backref=db.backref('jobs'))
