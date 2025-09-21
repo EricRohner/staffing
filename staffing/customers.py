@@ -98,9 +98,9 @@ def customer_jobs_add(customer_id):
                 return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
         return render_template('customer_jobs_add.html', customer=customer)
 
-@bp.route('/customers/customer_job_find_provider/<string:customer_id>/<string:job_id>', methods = ("GET", "POST"))
+@bp.route('/customers/customer_job_provider_search/<string:customer_id>/<string:job_id>', methods = ("GET", "POST"))
 @login_required
-def customer_job_find_provider(customer_id, job_id):
+def customer_job_provider_search(customer_id, job_id):
         customer = Customer.query.filter_by(id = customer_id).first()
         job = Job.query.filter_by(id = job_id).first()
         providers = []
