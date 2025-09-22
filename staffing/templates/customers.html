@@ -6,8 +6,8 @@
             <a class="block color4" href="{{ url_for("customers.create") }}">Create</a>
         {% endif %}
             <form method="GET" action="{{ url_for('customers.search') }}">
-                    <input name="search_string" value="" required>
                 <input class="block color4" type="submit" value="Search">
+                <input name="search_string" value="" required>
             </form>
     </div>
 
@@ -15,16 +15,16 @@
 
     {% for customer in customers %}
         <article class="customer">
-        <header class="container-h">
+        <header class="container-h color4f">
             <h1>{{ customer['customer_name'] }}</h1>
-            <div class="container-v">
-                <div class="address">{{ customer['customer_address'] }}</div>
-                <div class="updated">Most recent update: {{ customer['last_edited'].strftime('%Y-%m-%d') }}</div>
+            <div class="container-h">
+                <div class="address block">{{ customer['customer_address'] }}</div>
+                <div class="updated block">Most recent update: {{ customer['last_edited'].strftime('%Y-%m-%d') }}</div>
             </div>
-            <a class="action" href="{{ url_for('customers.customer_jobs', customer_id=customer['id']) }}">Jobs</a>
+            <a class="action block" href="{{ url_for('customers.customer_jobs', customer_id=customer['id']) }}">Jobs</a>
             {% if session['is_customer_admin'] %}
-                <a class="action" href="{{ url_for('customers.update', customer_id=customer['id']) }}">Edit</a>
-                <a class="danger" onclick="return confirm('Are you sure?');" href="{{ url_for('customers.delete', customer_id=customer['id']) }}">Delete</a>
+                <a class="action block" href="{{ url_for('customers.update', customer_id=customer['id']) }}">Edit</a>
+                <a class="danger block" onclick="return confirm('Are you sure?');" href="{{ url_for('customers.delete', customer_id=customer['id']) }}">Delete</a>
             {% endif %}
         </header>
         </article>

@@ -1,14 +1,13 @@
 {% extends "customers.html" %}
 {% block form %}
     <article class="customer">
-        <header class="container-h">
+        <header class="container-h color4f">
             <h1>{{ customer['customer_name'] }}</h1>
-            <div class="container-v">
-                <div class="address">{{ customer['customer_address'] }}</div>
-                <div class="updated">Most recent update: {{ customer['last_edited'].strftime('%Y-%m-%d') }}</div>
+            <div class="container-h">
+                <div class="address block">{{ customer['customer_address'] }}</div>
             </div>
             {% if session['is_customer_admin'] %}
-                <a class="action" href="{{ url_for('customers.customer_jobs_add', customer_id=customer['id']) }}">Add a job</a>
+                <a class="action block" href="{{ url_for('customers.customer_jobs_add', customer_id=customer['id']) }}">Add a job</a>
             {% endif %}
         </header>
         </article>
@@ -19,13 +18,13 @@
     <hr>
     
     {% for job in jobs %}
-        <article class="job container-h">
+        <article class="job container-h color4f">
             <h1>{{ job['job_title'] }}</h1>
-            <div>{{ job['job_start_date'] }}
+            <div class="block">{{ job['job_start_date'] }}
                 {% if job.provider_id %}
-                    <div>Provider: {{ job.provider.provider_name }}</div>
+                    <div class="block color3f">Provider: {{ job.provider.provider_name }}</div>
                 {% endif %}
-            <a href="{{ url_for('customers.customer_job_provider_search', customer_id=customer['id'], job_id=job['id']) }}">find a provider</a>
+            <a class="block" href="{{ url_for('customers.customer_job_provider_search', customer_id=customer['id'], job_id=job['id']) }}">find a provider</a>
         </article>
     {% endfor %}
 

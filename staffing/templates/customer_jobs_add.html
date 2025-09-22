@@ -1,14 +1,16 @@
 {% extends "customer_jobs.html" %}
 {% block job %}
-    <form class="container-v" method="post">
-        <label>Job title
+<div class="color4f container-h">
+    <form method="post">
+        <label class="block">Job title
             <input name="job_title" value="" required>
             <input name="job_start_date" type="date" required>
         </label>
 
-        <div class="container-h">
-            <input class="button" type="submit" value="Save">
-            <input class="danger" type="submit" value="Cancel" action="{{ url_for('customers.customer_jobs', customer_id = customer.id) }}" method="get" onclick="return confirm('Are you sure?');">
-        </div>
+            <input class="block color4f" type="submit" value="Save">
     </form>
+    <form class="container-h" method="get" action="{{ url_for('customers.customer_jobs', customer_id=customer.id) }}">
+        <input class="danger block color4f" type="submit" value="Cancel" onclick="return confirm('Are you sure?');" formnovalidate>
+    </form>
+</div>
 {% endblock %}

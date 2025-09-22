@@ -6,9 +6,9 @@
 {% endblock %}
 
 {% block body %}  
-        <div class="container-v">
+        <div class="container-v color1f">
             <form action="{{ url_for('dashboard.self_password_set') }}" method="get">
-                <input type="submit" value="Set Password" >
+                <input class="block color1f" type="submit" value="Set Password" >
             </form>
 
             {% block pass_form%}

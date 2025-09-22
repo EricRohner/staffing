@@ -2,13 +2,13 @@
 
 {% block provider_search %}
     <hr>
-    <form method="POST" action="{{ url_for('customers.customer_job_provider_search', customer_id = customer.id, job_id = jobs[0]['id'] ) }}">
+    <form class="color3f" method="POST" action="{{ url_for('customers.customer_job_provider_search', customer_id = customer.id, job_id = jobs[0]['id'] ) }}">
+        <input class="block color3f" type="submit" value="Search">
         <input name="search_string" value="" required>
-        <input class="block color3" type="submit" value="Search">
     </form>
 
 {% for provider in providers %}
-        <article class="provider">
+        <article class="provider color3f">
         <header class="container-h">
             <h1>{{ provider['provider_name'] }}</h1>
             <div class="container-v">

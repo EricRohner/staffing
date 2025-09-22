@@ -1,6 +1,6 @@
 {% extends "providers.html" %}
 {% block form %}
-    <form class="container-v" method="post">
+    <form class="container-v color3f" method="post">
         <label>Provider name
             <input name="provider_name" id="provider_name" value="" required>
         </label>
@@ -8,11 +8,11 @@
         <label>Email
             <input name="provider_email" id="provider_email" value="" required>
         </label>
-
         <div class="container-h">
-            <input class="button" type="submit" value="Save">
-            <input class="danger" type="submit" value="Cancel" action="{{ url_for('providers.index') }}" method="get" onclick="return confirm('Are you sure?');" formnovalidate>
-        </div>
-    </form>
-
+            <input class="block color3f" type="submit" value="Save">
+            </form>
+            <form method="get" action="{{ url_for('providers.index') }}">
+            <input class="block color3f" type="submit" value="Cancel" onclick="return confirm('Are you sure?');" formnovalidate>
+        </form>
+    </div>
 {% endblock %}

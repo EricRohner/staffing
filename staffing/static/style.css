@@ -13,12 +13,16 @@
 .container-h {
     display: flex;
     flex-direction: row;
-    align-items: flex-end
+    align-items: center
 }
 
 /*sizing*/
 
 a, input {
+    font-size: 16px;
+}
+
+.big {
     font-size: 16px;
 }
 
@@ -46,32 +50,57 @@ a, input {
     border-radius: 0;
 }
 
+.skinny_block {
+    text-decoration: none;
+    color: black;
+    padding: 4px 4px;
+    display: inline-block;
+    border: 2px;
+    border-radius: 2px;
+}
+
 /*Colors*/
 
 .flash {
-    color: #FF0000;
+    background-color: #f37353;
 }
 
 .color0 {
-    background-color: #eeeee8;
+    background-color: #f4fdc3;
 }
 
 .color1 {
     background-color: #358bb3;
 }
 
+.color1f {
+    background-color: #9ac5d9
+}
+
 .color2 {
     background-color: #e0975f;
+}
+
+.color2f {
+    background-color: #efcbaf
 }
 
 .color3 {
     background-color: #eab676;
 }
 
+.color3f {
+    background-color: #f4daba;
+}
+
 .color4 {
     background-color: #76b5c5;
 }
 
+.color4f {
+    background-color: #bbdae2;
+}
+
 .color5 {
-    background-color: #995239;
+    background-color: #993989;
 }

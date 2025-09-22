@@ -8,8 +8,8 @@
             </a>
             
             <form id="user_search" method="GET" action="{{ url_for('users.search') }}">
-                    <input name="search_string" id="search_string" value="" required>
                 <input class="block color2" type="submit" value="Search">
+                <input name="search_string" id="search_string" value="" required>
             </form>
         {% endif %}
     </div>
@@ -18,12 +18,12 @@
 
     {% for user in users %}
         <article class="user">
-        <header class="container-h">
+        <header class="container-h color2f">
             <h1>{{ user['user_name'] }}</h1>
-            <div class="about">Most recent update: {{ user['last_edited'].strftime('%Y-%m-%d') }}</div>
-            <a class="action" href="{{ url_for('users.update', id=user['id']) }}">Edit</a>
-            <a class="action" href="{{ url_for('users.set_password', id=user['id']) }}">Set password</a>
-            <a class="danger" onclick="return confirm('Are you sure?');" href="{{ url_for('users.delete', id=user['id']) }}">Delete</a>
+            <div class="block">Most recent update: {{ user['last_edited'].strftime('%Y-%m-%d') }}</div>
+            <a class="block" href="{{ url_for('users.update', id=user['id']) }}">Edit</a>
+            <a class="block" href="{{ url_for('users.set_password', id=user['id']) }}">Set password</a>
+            <a class="block" onclick="return confirm('Are you sure?');" href="{{ url_for('users.delete', id=user['id']) }}">Delete</a>
         </header>
         </article>
     {% endfor %}
