@@ -2,13 +2,12 @@
 
 {% block head %}
 <div class="big block color1 fill_w">Welcome {{session['user_name']}}</div>
-<hr>
 {% endblock %}
 
 {% block body %}  
-        <div class="container-v color1f">
-            <form action="{{ url_for('dashboard.self_password_set') }}" method="get">
-                <input class="block color1f" type="submit" value="Set Password" >
+        <div class="container-v color1f block fill_w">
+            <form class="color1f" action="{{ url_for('dashboard.self_password_set') }}" method="get">
+                <input class="dash_btn" type="submit" value="Set Password" >
             </form>
 
             {% block pass_form%}

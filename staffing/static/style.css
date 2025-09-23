@@ -44,63 +44,106 @@ a, input {
 .block {
     text-decoration: none;
     color: black;
-    padding: 16px 16px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 0;
+}
+
+.block_bold {
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
     display: inline-block;
     border: none;
     border-radius: 0;
 }
 
-.skinny_block {
+.dash_btn {
     text-decoration: none;
     color: black;
-    padding: 4px 4px;
+    background-color: white;
+    padding: 3px 3px;
     display: inline-block;
-    border: 2px;
-    border-radius: 2px;
+    border: 2px solid #5DADE2;
+    border-radius: 6px;
+}
+
+.user_btn {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    padding: 3px 3px;
+    display: inline-block;
+    border: 2px solid #48C9B0;
+    border-radius: 6px;
+}
+
+.prov_btn {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    padding: 3px 3px;
+    display: inline-block;
+    border: 2px solid #F4D03F;
+    border-radius: 6px;
+}
+
+.cust_btn {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    padding: 3px 3px;
+    display: inline-block;
+    border: 2px solid #F5B041;
+    border-radius: 6px;
 }
 
 /*Colors*/
 
 .flash {
-    background-color: #f37353;
+    background-color: #EC7063;
 }
 
 .color0 {
-    background-color: #f4fdc3;
+    background-color: #58D68D;
+}
+
+.color0f {
+    background-color: #ACEBCE;
 }
 
 .color1 {
-    background-color: #358bb3;
+    background-color: #5DADE2;
 }
 
 .color1f {
-    background-color: #9ac5d9
+    background-color: #AEEFF1
 }
 
 .color2 {
-    background-color: #e0975f;
+    background-color: #48C9B0;
 }
 
 .color2f {
-    background-color: #efcbaf
+    background-color: #A4E4D8
 }
 
 .color3 {
-    background-color: #eab676;
+    background-color: #F4D03F;
 }
 
 .color3f {
-    background-color: #f4daba;
+    background-color: #FAE89F;
 }
 
 .color4 {
-    background-color: #76b5c5;
+    background-color: #F5B041;
 }
 
 .color4f {
-    background-color: #bbdae2;
+    background-color: #FAD8A0;
 }
 
 .color5 {
-    background-color: #993989;
+    background-color: #AF7AC5;
 }

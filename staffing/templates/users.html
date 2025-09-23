@@ -1,33 +1,29 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <div class="container-h color2">
+    <div class="container-h block color2">
         {% if session['is_user_admin'] %}
-            <a class="block color2" href="{{url_for('users.create')}}" class="create">
+            <a class="user_btn" href="{{url_for('users.create')}}">
                 Create
             </a>
             
             <form id="user_search" method="GET" action="{{ url_for('users.search') }}">
-                <input class="block color2" type="submit" value="Search">
+                <input class="user_btn" type="submit" value="Search">
                 <input name="search_string" id="search_string" value="" required>
             </form>
         {% endif %}
     </div>
-
-    <hr>
-
     {% for user in users %}
         <article class="user">
-        <header class="container-h color2f">
-            <h1>{{ user['user_name'] }}</h1>
-            <div class="block">Most recent update: {{ user['last_edited'].strftime('%Y-%m-%d') }}</div>
-            <a class="block" href="{{ url_for('users.update', id=user['id']) }}">Edit</a>
-            <a class="block" href="{{ url_for('users.set_password', id=user['id']) }}">Set password</a>
-            <a class="block" onclick="return confirm('Are you sure?');" href="{{ url_for('users.delete', id=user['id']) }}">Delete</a>
+        <header class="container-h block color2f">
+            <div class="block_bold">{{ user['user_name'] }}</div>
+            <div class="block">Updated: {{ user['last_edited'].strftime('%Y-%m-%d') }}</div>
+            <a class="user_btn" href="{{ url_for('users.update', id=user['id']) }}">Edit</a>
+            <a class="user_btn" href="{{ url_for('users.set_password', id=user['id']) }}">Set password</a>
+            <a class="user_btn" onclick="return confirm('Are you sure?');" href="{{ url_for('users.delete', id=user['id']) }}">Delete</a>
         </header>
         </article>
     {% endfor %}
-
     {% block form %}
     {% endblock %}
 {% endblock %}

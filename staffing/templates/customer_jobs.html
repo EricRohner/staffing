@@ -1,31 +1,28 @@
 {% extends "customers.html" %}
 {% block form %}
-    <article class="customer">
-        <header class="container-h color4f">
-            <h1>{{ customer['customer_name'] }}</h1>
-            <div class="container-h">
-                <div class="address block">{{ customer['customer_address'] }}</div>
-            </div>
+    <article>
+        <header class="container-h block color4f">
+            <div class="block_bold">{{ customer['customer_name'] }}</div>
+            <div class="block">{{ customer['customer_address'] }}</div>
             {% if session['is_customer_admin'] %}
-                <a class="action block" href="{{ url_for('customers.customer_jobs_add', customer_id=customer['id']) }}">Add a job</a>
+                <a class="cust_btn" href="{{ url_for('customers.customer_jobs_add', customer_id=customer['id']) }}">Add a job</a>
             {% endif %}
         </header>
-        </article>
+    </article>
 
     {% block job %}
     {% endblock %}
-
-    <hr>
-    
     {% for job in jobs %}
-        <article class="job container-h color4f">
-            <h1>{{ job['job_title'] }}</h1>
-            <div class="block">{{ job['job_start_date'] }}
+    <article>
+        <header class="container-h block color0f">
+            <div class="block_bold">{{ job['job_title'] }}</div>
+            <div class="block">{{ job['job_start_date'] }}</div>
                 {% if job.provider_id %}
                     <div class="block color3f">Provider: {{ job.provider.provider_name }}</div>
                 {% endif %}
-            <a class="block" href="{{ url_for('customers.customer_job_provider_search', customer_id=customer['id'], job_id=job['id']) }}">find a provider</a>
-        </article>
+            <a class="prov_btn" href="{{ url_for('customers.customer_job_provider_search', customer_id=customer['id'], job_id=job['id']) }}">find a provider</a>
+        </header>
+    </article>
     {% endfor %}
 
     {% block provider_search %}

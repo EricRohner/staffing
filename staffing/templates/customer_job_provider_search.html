@@ -1,22 +1,25 @@
 {% extends "customer_jobs.html" %}
 
 {% block provider_search %}
-    <hr>
     <form class="color3f" method="POST" action="{{ url_for('customers.customer_job_provider_search', customer_id = customer.id, job_id = jobs[0]['id'] ) }}">
-        <input class="block color3f" type="submit" value="Search">
+        <input class="prov_btn" type="submit" value="Search">
         <input name="search_string" value="" required>
     </form>
 
 {% for provider in providers %}
-        <article class="provider color3f">
-        <header class="container-h">
-            <h1>{{ provider['provider_name'] }}</h1>
-            <div class="container-v">
-                <div class="email">{{ provider['provider_email'] }}</div>
+        <article class="color3f">
+        <header class="container-h block color3f">
+            <div class="block_bold">{{ provider['provider_name'] }}</div>
+            <div class="container-h">
+                <div class="email block">{{ provider['provider_email'] }}</div>
+                <div class="updated block">Updated: {{ provider['last_edited'].strftime('%Y-%m-%d') }}</div>
             </div>
-            <a href="{{ url_for('customers.customer_job_assign_provider', customer_id=customer['id'], job_id=jobs[0]['id'], provider_id=provider['id']) }}">Assign to job</a>
+            {% if session['is_provider_admin'] %}
+                <a class="prov_btn" href="{{ url_for('customers.customer_job_assign_provider', customer_id=customer['id'], job_id=jobs[0]['id'], provider_id=provider['id']) }}">Assign to job</a>
+            {% endif %}
         </header>
         </article>
     {% endfor %}
 
 {% endblock %}
+

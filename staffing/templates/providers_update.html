@@ -1,7 +1,8 @@
 {% extends "providers.html" %}
 {% block form %}
 <div class="color3f">
-    <h2>Edit {{ provider['provider_name'] }}</h2>
+<div class="block">
+    <div class="block_bold">Update {{ provider['provider_name'] }}</div>
 
     <form class="container-v" method="post">
         <label>Provider name
@@ -13,10 +14,10 @@
     </label>
         
         <div class="container-h">
-            <input class="block color3f" type="submit" value="Save">
+            <input class="prov_btn" type="submit" value="Save">
     </form>
             <form method="get" action="{{ url_for('providers.index') }}">
-            <input class="block color3f" type="submit" value="Cancel" onclick="return confirm('Are you sure?');" formnovalidate>
+            <input class="prov_btn" type="submit" value="Cancel" onclick="return confirm('Are you sure?');" formnovalidate>
         </form>
     </div>
 </div>

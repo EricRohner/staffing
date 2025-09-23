@@ -1,7 +1,8 @@
 {% extends "customers.html" %}
 {% block form %}
 <div class="color4f">
-    <div class="block color4f">Edit {{ customer['customer_name'] }}</div>
+    <div class="block">
+    <div class="block_bold">Update {{ customer['customer_name'] }}</div>
 
     <form class="container-v" method="post">
         <label>Customer name
@@ -13,10 +14,10 @@
     </label>
         
         <div class="container-h">
-            <input class="block color4f" type="submit" value="Save">
+            <input class="cust_btn" type="submit" value="Save">
     </form>
             <form method="get" action="{{ url_for('customers.index') }}">
-                <input class="block color4f" type="submit" value="Cancel" onclick="return confirm('Are you sure?');" formnovalidate>
+                <input class="cust_btn" type="submit" value="Cancel" onclick="return confirm('Are you sure?');" formnovalidate>
             </form>
     </div>
 </div>

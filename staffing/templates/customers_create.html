@@ -1,6 +1,7 @@
 {% extends "customers.html" %}
 {% block form %}
-    <form class="container-v color4f" method="post">
+<div class="color4f">
+    <form class="container-v block" method="post">
         <label>Customer name
             <input name="customer_name" value="" required>
         </label>
@@ -10,11 +11,12 @@
         </label>
 
         <div class="container-h">
-            <input class="block color4f" type="submit" value="Save">
+            <input class="cust_btn" type="submit" value="Save">
         
         </form>
         <form method="get" action="{{ url_for('customers.index') }}">
-            <input class="block color4f" type="submit" value="Cancel" onclick="return confirm('Are you sure?');" formnovalidate>
+            <input class="cust_btn" type="submit" value="Cancel" onclick="return confirm('Are you sure?');" formnovalidate>
         </form>
-        </div>
+    </div>
+</div>
 {% endblock %}

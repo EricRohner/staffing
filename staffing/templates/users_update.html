@@ -1,7 +1,8 @@
 {% extends "users.html" %}
 {% block form %}
 <div class="color2f">
-    <h2>Edit {{ user['user_name'] }}</h2>
+    <div class="block">
+    <div class="block_bold">Update {{ user['user_name'] }}</div>
 
     <form class="container-v color2f" method="post">
         <label>User name
@@ -20,11 +21,12 @@
             <input type="checkbox" name="customer_admin" id="customer_admin" {% if user['is_customer_admin'] %}checked{% endif %}>
         </label>
         <div class="container-h">
-            <input class="block color2f" type="submit" value="Save">
+            <input class="user_btn" type="submit" value="Save">
     </form>
             <form method="get" action="{{ url_for('users.index') }}">
-            <input class="block color2f" type="submit" value="Cancel" onclick="return confirm('Are you sure?');" formnovalidate>
+            <input class="user_btn" type="submit" value="Cancel" onclick="return confirm('Are you sure?');" formnovalidate>
             </form>
         </div>
+    </div>
 </div>
 {% endblock %}
