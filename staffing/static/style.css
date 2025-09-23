@@ -64,7 +64,7 @@ a, input {
     background-color: white;
     padding: 3px 3px;
     display: inline-block;
-    border: 2px solid #5DADE2;
+    border: 2px solid #c0c8c5;
     border-radius: 6px;
 }
 
@@ -74,7 +74,7 @@ a, input {
     background-color: white;
     padding: 3px 3px;
     display: inline-block;
-    border: 2px solid #48C9B0;
+    border: 2px solid #d49372;
     border-radius: 6px;
 }
 
@@ -84,7 +84,7 @@ a, input {
     background-color: white;
     padding: 3px 3px;
     display: inline-block;
-    border: 2px solid #F4D03F;
+    border: 2px solid #c1a89c;
     border-radius: 6px;
 }
 
@@ -94,56 +94,56 @@ a, input {
     background-color: white;
     padding: 3px 3px;
     display: inline-block;
-    border: 2px solid #F5B041;
+    border: 2px solid #facf86;
     border-radius: 6px;
 }
 
 /*Colors*/
 
 .flash {
-    background-color: #EC7063;
+    background-color: #f8c288;
 }
 
 .color0 {
-    background-color: #58D68D;
+    background-color: #485569;
 }
 
 .color0f {
-    background-color: #ACEBCE;
+    background-color: #a4aab4;
 }
 
 .color1 {
-    background-color: #5DADE2;
+    background-color: #c0c8c5;
 }
 
 .color1f {
-    background-color: #AEEFF1
+    background-color: #e0e4e2;
 }
 
 .color2 {
-    background-color: #48C9B0;
+    background-color: #d49372;
 }
 
 .color2f {
-    background-color: #A4E4D8
+    background-color: #eac9b9;
 }
 
 .color3 {
-    background-color: #F4D03F;
+    background-color: #c1a89c;
 }
 
 .color3f {
-    background-color: #FAE89F;
+    background-color: #e0d4ce;
 }
 
 .color4 {
-    background-color: #F5B041;
+    background-color: #facf86;
 }
 
 .color4f {
-    background-color: #FAD8A0;
+    background-color: #fde7c3;
 }
 
 .color5 {
-    background-color: #AF7AC5;
+    background-color: #646d7e;
 }

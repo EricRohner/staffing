@@ -18,6 +18,25 @@ class User(db.Model):
         self.password_hash = generate_password_hash(password)
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    def to_dict(self):
+        data = {
+            'id' : self.id,
+            'user_name' : self.user_name,
+            'is_user_admin' : self.is_user_admin,
+            'is_provider_admin' : self.is_provider_admin,
+            'is_customer_admin' : self.is_customer_admin,
+            'created' : self.created,
+            'last_edited' : self.last_edited
+        }
+        return data
+    def from_dict(self, data, new_user=False):
+        for field in ['user_name', 'is_user_admin', 'is_provider_admin', 'is_customer_admin]']:
+            if field in data:
+                setattr(self, field, data[field])
+        if new_user and 'password' in data:
+            self.set_password(data['password'])
+            self.created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+        self.last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
 class Provider(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -25,6 +44,22 @@ class Provider(db.Model):
     provider_email = db.Column(db.String(25), unique=True, nullable=False)
     created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    def to_dict(self):
+        data = {
+            'id' : self.id,
+            'provider_name' : self.provider_name,
+            'provider_email' : self.provider_email,
+            'created' : self.created,
+            'last_edited' : self.last_edited
+        }
+        return data
+    def from_dict(self, data, new_provider=False):
+        for field in ['provider_name', 'provider_email']:
+            if field in data:
+                setattr(self, field, data[field])
+        if new_provider:
+            self.created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+        self.last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -32,6 +67,22 @@ class Customer(db.Model):
     customer_address = db.Column(db.String(25), nullable=False)
     created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    def to_dict(self):
+        data = {
+            'id' : self.id,
+            'customer_name' : self.customer_name,
+            'customer_address' : self.customer_email,
+            'created' : self.created,
+            'last_edited' : self.last_edited
+        }
+        return data
+    def from_dict(self, data, new_customer=False):
+        for field in ['customer_name', 'customer_address']:
+            if field in data:
+                setattr(self, field, data[field])
+        if new_customer:
+            self.created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+        self.last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
 class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -44,3 +95,21 @@ class Job(db.Model):
     provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'), nullable=True)
     provider = db.relationship('Provider', backref=db.backref('jobs'))
     customer = db.relationship('Customer', backref=db.backref('jobs'))
+    def to_dict(self):
+        data = {
+            'id' : self.id,
+            'job_title' : self.job_title,
+            'job_start_date' : self.job_start_date,
+            'customer_id' : self.customer_id,
+            'provider_id' : self.provider_id,
+            'created' : self.created,
+            'last_edited' : self.last_edited,
+        }
+        return data
+    def from_dict(self, data, new_job=False):
+        for field in ['job_title', 'job_start_date, customer_id, provider_id']:
+            if field in data:
+                setattr(self, field, data[field])
+        if new_job:
+            self.created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+        self.last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))

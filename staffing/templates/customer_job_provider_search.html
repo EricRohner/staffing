@@ -1,10 +1,12 @@
 {% extends "customer_jobs.html" %}
 
 {% block provider_search %}
-    <form class="color3f" method="POST" action="{{ url_for('customers.customer_job_provider_search', customer_id = customer.id, job_id = jobs[0]['id'] ) }}">
+<div class="color3f">
+    <form class="block" method="POST" action="{{ url_for('customers.customer_job_provider_search', customer_id = customer.id, job_id = jobs[0]['id'] ) }}">
         <input class="prov_btn" type="submit" value="Search">
         <input name="search_string" value="" required>
     </form>
+</div>
 
 {% for provider in providers %}
         <article class="color3f">

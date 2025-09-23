@@ -120,6 +120,7 @@ def customer_job_provider_search(customer_id, job_id):
 
 @bp.route('/customers/customer_job_assign_provider/<string:customer_id>/<string:job_id>/<string:provider_id>')
 @login_required
+@customer_admin_required
 def customer_job_assign_provider(customer_id, job_id, provider_id):
     job = Job.query.filter_by(id=job_id).first()
     if not job:
