@@ -4,6 +4,10 @@ from .models import User
 
 bp = Blueprint ('auth', __name__)
 
+############################################################################################
+## Auth Routes
+############################################################################################
+
 @bp.route('/')
 def index():
     return render_template('auth.html')
@@ -31,6 +35,10 @@ def logout():
     session.clear()
     flash("You have been logged out.")
     return redirect(url_for('auth.index'))
+
+############################################################################################
+## Decorators
+############################################################################################
 
 def login_required(view):
     @functools.wraps(view)

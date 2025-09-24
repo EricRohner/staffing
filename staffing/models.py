@@ -5,6 +5,10 @@ from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
+############################################################################################
+## User Model
+############################################################################################
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(25), unique=True, nullable=False)
@@ -30,13 +34,17 @@ class User(db.Model):
         }
         return data
     def from_dict(self, data, new_user=False):
-        for field in ['user_name', 'is_user_admin', 'is_provider_admin', 'is_customer_admin]']:
+        for field in ['user_name', 'is_user_admin', 'is_provider_admin', 'is_customer_admin']:
             if field in data:
                 setattr(self, field, data[field])
         if new_user and 'password' in data:
             self.set_password(data['password'])
-            self.created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-        self.last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+            self.created = datetime.now(timezone.utc)
+        self.last_edited = datetime.now(timezone.utc)
+
+############################################################################################
+## Provider Model
+############################################################################################
 
 class Provider(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -58,8 +66,12 @@ class Provider(db.Model):
             if field in data:
                 setattr(self, field, data[field])
         if new_provider:
-            self.created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-        self.last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+            self.created = datetime.now(timezone.utc)
+        self.last_edited = datetime.now(timezone.utc)
+
+############################################################################################
+## Customer Model
+############################################################################################
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -71,7 +83,7 @@ class Customer(db.Model):
         data = {
             'id' : self.id,
             'customer_name' : self.customer_name,
-            'customer_address' : self.customer_email,
+            'customer_address' : self.customer_address,
             'created' : self.created,
             'last_edited' : self.last_edited
         }
@@ -81,8 +93,12 @@ class Customer(db.Model):
             if field in data:
                 setattr(self, field, data[field])
         if new_customer:
-            self.created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-        self.last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+            self.created = datetime.now(timezone.utc)
+        self.last_edited = datetime.now(timezone.utc)
+
+############################################################################################
+## Job Model
+############################################################################################
 
 class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -107,9 +123,10 @@ class Job(db.Model):
         }
         return data
     def from_dict(self, data, new_job=False):
-        for field in ['job_title', 'job_start_date, customer_id, provider_id']:
+        self.job_start_date = datetime.strptime(data['job_start_date'], "%Y-%m-%d").date()
+        for field in ['job_title', 'customer_id', 'provider_id']:
             if field in data:
                 setattr(self, field, data[field])
         if new_job:
-            self.created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-        self.last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+            self.created = datetime.now(timezone.utc)
+        self.last_edited = datetime.now(timezone.utc)

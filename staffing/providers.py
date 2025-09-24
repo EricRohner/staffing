@@ -5,6 +5,10 @@ from .models import db, Provider
 
 bp = Blueprint ('providers', __name__)
 
+############################################################################################
+## Provider Routes
+############################################################################################
+
 @bp.route('/providers')
 @login_required
 def index():

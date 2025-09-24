@@ -21,7 +21,8 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
-    from . import auth, dashboard, users, providers, customers
+    from . import auth, dashboard, users, providers, customers, api
+    app.register_blueprint(api.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(dashboard.bp)
     app.register_blueprint(users.bp)

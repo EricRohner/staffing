@@ -5,6 +5,10 @@ from .models import db, Customer, Job, Provider
 
 bp = Blueprint ('customers', __name__)
 
+############################################################################################
+## Customer Routes
+############################################################################################
+
 @bp.route('/customers')
 @login_required
 def index():
@@ -117,7 +121,6 @@ def customer_job_provider_search(customer_id, job_id):
 
         return render_template('customer_job_provider_search.html', customer = customer, jobs = [job], providers = providers)
 
-
 @bp.route('/customers/customer_job_assign_provider/<string:customer_id>/<string:job_id>/<string:provider_id>')
 @login_required
 @customer_admin_required
@@ -126,12 +129,10 @@ def customer_job_assign_provider(customer_id, job_id, provider_id):
     if not job:
         flash("Job not found")
         return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
-
     provider = Provider.query.filter_by(id=provider_id).first()
     if not provider:
         flash("Provider not found")
         return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
-
     job.provider_id = provider_id
     db.session.add(job)
     db.session.commit()

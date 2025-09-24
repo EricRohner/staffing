@@ -4,6 +4,10 @@ from .models import User, db
 
 bp = Blueprint ('dashboard', __name__)
 
+############################################################################################
+## Dashboard Routes
+############################################################################################
+
 @bp.route('/dashboard')
 @login_required
 def index():
