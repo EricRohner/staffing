@@ -71,6 +71,8 @@ def delete(customer_id):
         if not customer:
                 flash("Customer not found")
                 return redirect(url_for('customers.index'))
+        for job in customer.jobs:
+               db.session.delete(job)
         db.session.delete(customer)
         db.session.commit()
         flash(f"Customer {customer.customer_name} has been deleted.")

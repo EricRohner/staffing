@@ -93,6 +93,7 @@ class Customer(db.Model):
             'id' : self.id,
             'customer_name' : self.customer_name,
             'customer_address' : self.customer_address,
+            'jobs': [job.to_dict() for job in self.jobs],
             'created' : self.created,
             'last_edited' : self.last_edited
         }
