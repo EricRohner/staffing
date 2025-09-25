@@ -8,10 +8,7 @@ bp = Blueprint ('api', __name__)
 ## User API
 ############################################################################################
 
-@bp.route('/api/users/<int:id>', methods = ['GET'])
-def get_user(id):
-       return db.get_or_404(User, id).to_dict()
-
+#Create
 @bp.route('/api/users', methods=['POST'])
 def create_user():
         data = request.get_json()
@@ -25,14 +22,28 @@ def create_user():
         db.session.commit()
         return user.to_dict(), 201, {'Location': url_for('api.get_user', id=user.id)}
 
+#Read 1
+@bp.route('/api/users/<int:id>', methods = ['GET'])
+def get_user(id):
+       return db.get_or_404(User, id).to_dict()
+
+#Update
+@bp.route('/api/users/update/<int:id>', methods=['PUT'])
+def update_user(id):
+    data = request.get_json()
+    user = db.get_or_404(User, id)
+    collision = User.query.filter_by(user_name=data['user_name']).first()
+    if collision and collision.id != id:
+        abort(400, description="user_name already taken")
+    user.from_dict(data)
+    db.session.add(user)
+    db.session.commit()
+    return user.to_dict(), 201, {'Location': url_for('api.get_user', id=user.id)}
 ############################################################################################
 ## Provider API
 ############################################################################################
 
-@bp.route('/api/providers/<int:id>', methods = ['GET'])
-def get_provider(id):
-       return db.get_or_404(Provider, id).to_dict()
-
+#Create
 @bp.route('/api/providers', methods=['POST'])
 def create_provider():
         data = request.get_json()
@@ -46,14 +57,28 @@ def create_provider():
         db.session.commit()
         return provider.to_dict(), 201, {'Location': url_for('api.get_provider', id=provider.id)}
 
+#Read 1
+@bp.route('/api/providers/<int:id>', methods = ['GET'])
+def get_provider(id):
+       return db.get_or_404(Provider, id).to_dict()
+
+@bp.route('/api/providers/update/<int:id>', methods=['PUT'])
+def update_provider(id):
+    data = request.get_json()
+    provider = db.get_or_404(Provider, id)
+    collision = Provider.query.filter_by(provider_email=data['provider_email']).first()
+    if collision and collision.id != id:
+        abort(400, description="provider_email already taken")
+    provider.from_dict(data)
+    db.session.add(provider)
+    db.session.commit()
+    return provider.to_dict(), 201, {'Location': url_for('api.get_provider', id=provider.id)}
+
 ############################################################################################
 ## Customer API
 ############################################################################################
 
-@bp.route('/api/customers/<int:id>', methods = ['GET'])
-def get_customer(id):
-       return db.get_or_404(Customer, id).to_dict()
-
+#Create
 @bp.route('/api/customers', methods=['POST'])
 def create_customer():
         data = request.get_json()
@@ -67,20 +92,34 @@ def create_customer():
         db.session.commit()
         return customer.to_dict(), 201, {'Location': url_for('api.get_customer', id=customer.id)}
 
+#Read 1
+@bp.route('/api/customers/<int:id>', methods = ['GET'])
+def get_customer(id):
+       return db.get_or_404(Customer, id).to_dict()
+
+#Update
+@bp.route('/api/customers/update/<int:id>', methods=['PUT'])
+def update_customer(id):
+    data = request.get_json()
+    customer = db.get_or_404(Customer, id)
+    collision = Customer.query.filter_by(customer_name=data['customer_name']).first()
+    if collision and collision.id != id:
+        abort(400, description="customer_name already taken")
+    customer.from_dict(data)
+    db.session.add(customer)
+    db.session.commit()
+    return customer.to_dict(), 201, {'Location': url_for('api.get_customer', id=customer.id)}
+
 ############################################################################################
 ## Jobs API
 ############################################################################################
 
-@bp.route('/api/jobs/<int:id>', methods = ['GET'])
-def get_job(id):
-       return db.get_or_404(Job, id).to_dict()
-
+#Create
 @bp.route('/api/jobs', methods=['POST'])
 def create_job():
         data = request.get_json()
         if 'job_title' not in data or 'job_start_date' not in data or 'customer_id' not in data:
             abort(400, description="Missing one or more user field in request data")
-        
         try:
             datetime.strptime(data['job_start_date'], "%Y-%m-%d").date()
         except ValueError:
@@ -90,3 +129,23 @@ def create_job():
         db.session.add(job)
         db.session.commit()
         return job.to_dict(), 201, {'Location': url_for('api.get_customer', id=job.id)}
+
+#Read 1
+@bp.route('/api/jobs/<int:id>', methods = ['GET'])
+def get_job(id):
+       return db.get_or_404(Job, id).to_dict()
+
+#Update
+@bp.route('/api/jobs/update/<int:id>', methods=['PUT'])
+def update_job(id):
+    data = request.get_json()
+    if 'job_start_date' in data: 
+        try:
+            datetime.strptime(data['job_start_date'], "%Y-%m-%d").date()
+        except ValueError:
+            abort(400, "Invalid date format for job_start_date. Expected YYYY-MM-DD.")
+    job = db.get_or_404(Job, id)
+    job.from_dict(data)
+    db.session.add(job)
+    db.session.commit()
+    return job.to_dict(), 201, {'Location': url_for('api.get_job', id=job.id)}
