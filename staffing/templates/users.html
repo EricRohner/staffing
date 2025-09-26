@@ -13,7 +13,7 @@
             </form>
         {% endif %}
     </div>
-    {% for user in users %}
+    {% for user in users['items'] %}
         <article class="user">
         <header class="container-h block color2f">
             <div class="block_bold">{{ user['user_name'] }}</div>
@@ -24,6 +24,15 @@
         </header>
         </article>
     {% endfor %}
+
+    {% if users['_links']['prev'] %}
+        <a class="user_btn" href="{{ users['_links']['prev'] }}">Previous</a>
+    {% endif %}
+
+    {% if users['_links']['next'] %}
+        <a class="user_btn" href="{{ users['_links']['next'] }}">Next</a>
+    {% endif %}
+
     {% block form %}
     {% endblock %}
 {% endblock %}

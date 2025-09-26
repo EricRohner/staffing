@@ -27,8 +27,15 @@ def create_user():
 def get_user(id):
        return db.get_or_404(User, id).to_dict()
 
+#Read users paginated
+@bp.route('/api/users', methods=['GET'])
+def get_users():
+    page = request.args.get('page', 1, type=int)
+    per_page = min(request.args.get('per_page', 10, type=int), 100)
+    return User.to_collection_dict(db.select(User), page, per_page, 'api.get_users')
+
 #Update
-@bp.route('/api/users/update/<int:id>', methods=['PUT'])
+@bp.route('/api/users/<int:id>', methods=['PUT'])
 def update_user(id):
     data = request.get_json()
     user = db.get_or_404(User, id)
@@ -41,7 +48,7 @@ def update_user(id):
     return user.to_dict(), 202, {'Location': url_for('api.get_user', id=user.id)}
 
 #Delete
-@bp.route('/api/users/delete/<id>', methods=['DELETE'])
+@bp.route('/api/users/<id>', methods=['DELETE'])
 def delete_user(id):
     user = db.get_or_404(User, id)
     db.session.delete(user)
@@ -72,7 +79,7 @@ def get_provider(id):
        return db.get_or_404(Provider, id).to_dict()
 
 #Update
-@bp.route('/api/providers/update/<int:id>', methods=['PUT'])
+@bp.route('/api/providers/<int:id>', methods=['PUT'])
 def update_provider(id):
     data = request.get_json()
     provider = db.get_or_404(Provider, id)
@@ -85,7 +92,7 @@ def update_provider(id):
     return provider.to_dict(), 202, {'Location': url_for('api.get_provider', id=provider.id)}
 
 #Delete
-@bp.route('/api/providers/delete/<id>', methods=['DELETE'])
+@bp.route('/api/providers/<id>', methods=['DELETE'])
 def delete_provider(id):
     provider = db.get_or_404(Provider, id)
     db.session.delete(provider)
@@ -116,7 +123,7 @@ def get_customer(id):
     return db.get_or_404(Customer, id).to_dict()
 
 #Update
-@bp.route('/api/customers/update/<int:id>', methods=['PUT'])
+@bp.route('/api/customers/<int:id>', methods=['PUT'])
 def update_customer(id):
     data = request.get_json()
     customer = db.get_or_404(Customer, id)
@@ -129,7 +136,7 @@ def update_customer(id):
     return customer.to_dict(), 202, {'Location': url_for('api.get_customer', id=customer.id)}
 
 #Delete
-@bp.route('/api/customers/delete/<id>', methods=['DELETE'])
+@bp.route('/api/customers/<id>', methods=['DELETE'])
 def delete_customer(id):
     customer = db.get_or_404(Customer, id)
     for job in customer.jobs:
@@ -164,7 +171,7 @@ def get_job(id):
        return db.get_or_404(Job, id).to_dict()
 
 #Update
-@bp.route('/api/jobs/update/<int:id>', methods=['PUT'])
+@bp.route('/api/jobs/<int:id>', methods=['PUT'])
 def update_job(id):
     data = request.get_json()
     if 'job_start_date' in data: 
@@ -179,7 +186,7 @@ def update_job(id):
     return job.to_dict(), 202, {'Location': url_for('api.get_job', id=job.id)}
 
 #Delete
-@bp.route('/api/jobs/delete/<id>', methods=['DELETE'])
+@bp.route('/api/jobs/<id>', methods=['DELETE'])
 def delete_job(id):
     job = db.get_or_404(Job, id)
     db.session.delete(job)

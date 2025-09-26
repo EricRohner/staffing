@@ -21,9 +21,9 @@ def index():
 def create():
         if request.method == "POST":
                 if not Provider.query.filter_by(provider_email=request.form['provider_email']).first():
-                        new_provider = Provider(provider_email=request.form['provider_email'])
-                        new_provider.provider_name = request.form['provider_name']
-                        db.session.add(new_provider)
+                        provider = Provider()
+                        provider.from_dict(request.form)
+                        db.session.add(provider)
                         db.session.commit()
                         return redirect(url_for('providers.index'))
                 else:
@@ -57,9 +57,7 @@ def update(id):
                 if collision and collision.id != provider.id:
                         flash("Provider email already exists.")
                         return redirect(url_for('providers.update', id=id))
-                provider.provider_name=request.form['provider_name']
-                provider.provider_email=request.form['provider_email']
-                provider.last_edited=datetime.now(timezone.utc)
+                provider.from_dict(request.form)
                 db.session.commit()
                 flash("Provider updated.")
                 return redirect(url_for('providers.index'))

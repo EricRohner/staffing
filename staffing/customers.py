@@ -21,9 +21,9 @@ def index():
 def create():
         if request.method == "POST":
                 if not Customer.query.filter_by(customer_name = request.form['customer_name']).first():
-                        new_customer = Customer(customer_name = request.form['customer_name'])
-                        new_customer.customer_address = request.form['customer_address']
-                        db.session.add(new_customer)
+                        customer = Customer()
+                        customer.from_dict(request.form)
+                        db.session.add(customer)
                         db.session.commit()
                         return redirect(url_for('customers.index'))
                 else:
@@ -55,9 +55,7 @@ def update(customer_id):
                 if collision and collision.id != customer.id:
                         flash("Customer name already exists.")
                         return redirect(url_for('customers.update', id=customer_id))
-                customer.customer_name = request.form['customer_name']
-                customer.customer_address = request.form['customer_address']
-                customer.last_edited = datetime.now(timezone.utc)
+                customer.from_dict(request.form)
                 db.session.commit()
                 flash("Customer updated.")
                 return redirect(url_for('customers.index'))
@@ -96,10 +94,10 @@ def customer_jobs_add(customer_id):
                 return redirect(url_for('customers.index'))
         if request.method == "POST":
                 print(request.form['job_title'])
-                new_job = Job(job_title = request.form['job_title'])
-                new_job.job_start_date = datetime.strptime(request.form['job_start_date'], '%Y-%m-%d')
-                new_job.customer_id = customer_id
-                db.session.add(new_job)
+                job = Job()
+                job.customer_id = customer_id
+                job.from_dict(request.form)
+                db.session.add(job)
                 db.session.commit()
                 return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
         return render_template('customer_jobs_add.html', customer=customer)
