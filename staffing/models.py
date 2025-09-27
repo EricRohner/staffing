@@ -80,7 +80,7 @@ class User(paginated_mixin, db.Model):
 ## Provider Model
 ############################################################################################
 
-class Provider(db.Model):
+class Provider(paginated_mixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     provider_name = db.Column(db.String(25), nullable=False)
     provider_email = db.Column(db.String(25), unique=True, nullable=False)
@@ -110,7 +110,7 @@ class Provider(db.Model):
 ## Customer Model
 ############################################################################################
 
-class Customer(db.Model):
+class Customer(paginated_mixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String(25), unique=True, nullable=False)
     customer_address = db.Column(db.String(25), nullable=False)
@@ -140,7 +140,7 @@ class Customer(db.Model):
 ## Job Model
 ############################################################################################
 
-class Job(db.Model):
+class Job(paginated_mixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     job_title = db.Column(db.String(25), nullable=False)
     job_start_date = db.Column(db.Date, nullable=False)

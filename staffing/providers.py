@@ -12,7 +12,9 @@ bp = Blueprint ('providers', __name__)
 @bp.route('/providers')
 @login_required
 def index():
-        providers = Provider.query.order_by(Provider.last_edited.desc()).limit(10).all()
+        page = request.args.get('page', 1, type=int)
+        per_page = min(request.args.get('per_page', 10, type=int), 100)
+        providers = Provider.to_collection_dict(Provider.query.order_by(Provider.last_edited.desc()), page, per_page, 'providers.index')
         return render_template('providers.html', providers=providers)
 
 @bp.route('/providers/create', methods=("GET", "POST"))
@@ -34,14 +36,16 @@ def create():
 @login_required
 def search():
         search_string = request.args.get('search_string', '')
-        providers = Provider.query.filter(
+        page = request.args.get('page', 1, type=int)
+        per_page = min(request.args.get('per_page', 10, type=int), 100)
+        providers = Provider.to_collection_dict(Provider.query.filter(
                 db.or_(Provider.provider_name.like(f"{search_string}%"),
-                        Provider.provider_email.like(f"{search_string}%")
+                Provider.provider_email.like(f"{search_string}%")
                 )).order_by(
-                        Provider.provider_email != search_string,
-                        Provider.provider_name != search_string,
-                        Provider.provider_email.asc()
-                ).all()
+                Provider.provider_email != search_string,
+                Provider.provider_name != search_string,
+                Provider.provider_email.asc()
+                ), page, per_page, 'providers.search', search_string=search_string)
         return render_template('providers.html', providers=providers)
 
 @bp.route('/providers/update/<string:id>', methods=("GET", "POST"))

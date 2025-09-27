@@ -10,7 +10,7 @@
             </form>
         
     </div>
-    {% for provider in providers %}
+    {% for provider in providers['items'] %}
         <article class="color3f">
         <header class="container-h block color3f">
             <div class="block_bold">{{ provider['provider_name'] }}</div>
@@ -26,6 +26,14 @@
         </article>
     {% endfor %}
 
-    {% block form %}
-    {% endblock %}
+    <div class="container-h block color3">
+    {% if providers['_links']['prev'] %}
+        <a class="prov_btn" href="{{ providers['_links']['prev'] }}">Previous</a>
+    {% endif %}
+
+    {% if providers['_links']['next'] %}
+        <a class="prov_btn" href="{{ providers['_links']['next'] }}">Next</a>
+    {% endif %}
+    </div>
+
 {% endblock %}

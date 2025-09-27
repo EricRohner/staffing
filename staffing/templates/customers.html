@@ -10,7 +10,7 @@
                 <input name="search_string" value="" required>
             </form>
     </div>
-    {% for customer in customers %}
+    {% for customer in customers['items'] %}
         <article class="color4f">
         <header class="container-h block">
             <div class="block_bold">{{ customer['customer_name'] }}</div>
@@ -26,6 +26,16 @@
         </header>
         </article>
     {% endfor %}
+
+    <div class="container-h block color4">
+    {% if customers['_links']['prev'] %}
+        <a class="cust_btn" href="{{ customers['_links']['prev'] }}">Previous</a>
+    {% endif %}
+
+    {% if customers['_links']['next'] %}
+        <a class="cust_btn" href="{{ customers['_links']['next'] }}">Next</a>
+    {% endif %}
+    </div>
 
     {% block customer_form %}
     {% endblock %}

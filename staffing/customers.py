@@ -12,8 +12,10 @@ bp = Blueprint ('customers', __name__)
 @bp.route('/customers')
 @login_required
 def index():
-        customers = Customer.query.order_by(Customer.last_edited.desc()).limit(10).all()
-        return render_template('Customers.html', customers = customers)
+        page = request.args.get('page', 1, type=int)
+        per_page = min(request.args.get('per_page', 10, type=int), 100)
+        customers = Customer.to_collection_dict(Customer.query.order_by(Customer.last_edited.desc()), page, per_page, 'customers.index')
+        return render_template('customers.html', customers=customers)
 
 @bp.route('/customers/create', methods=("GET", "POST"))
 @login_required
@@ -34,12 +36,14 @@ def create():
 @login_required
 def search():
         search_string = request.args.get('search_string', '')
-        customers = Customer.query.filter(
+        page = request.args.get('page', 1, type=int)
+        per_page = min(request.args.get('per_page', 10, type=int), 100)
+        customers = Customer.to_collection_dict(Customer.query.filter(
                 Customer.customer_name.like(f"{search_string}%")
-        ).order_by(
+                ).order_by(
                 Customer.customer_name != search_string,
                 Customer.customer_name.asc()
-        ).all()
+                ), page, per_page, 'customers.search', search_string=search_string)
         return render_template('customers.html', customers = customers)
 
 @bp.route('/customers/update/<string:customer_id>', methods = ("GET", "POST"))

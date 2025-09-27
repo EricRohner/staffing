@@ -101,7 +101,7 @@ a, input {
 /*Colors*/
 
 .flash {
-    background-color: #f8c288;
+    background-color: #d49372
 }
 
 .color0 {
@@ -121,11 +121,11 @@ a, input {
 }
 
 .color2 {
-    background-color: #d49372;
+    background-color: #f8c288;
 }
 
 .color2f {
-    background-color: #eac9b9;
+    background-color: #fce1c4;
 }
 
 .color3 {
@@ -145,5 +145,5 @@ a, input {
 }
 
 .color5 {
-    background-color: #646d7e;
+    background-color: #a4aab4;
 }

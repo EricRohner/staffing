@@ -25,6 +25,7 @@
         </article>
     {% endfor %}
 
+    <div class="container-h block color2">
     {% if users['_links']['prev'] %}
         <a class="user_btn" href="{{ users['_links']['prev'] }}">Previous</a>
     {% endif %}
@@ -32,7 +33,5 @@
     {% if users['_links']['next'] %}
         <a class="user_btn" href="{{ users['_links']['next'] }}">Next</a>
     {% endif %}
-
-    {% block form %}
-    {% endblock %}
+    </div>
 {% endblock %}

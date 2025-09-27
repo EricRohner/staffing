@@ -16,7 +16,6 @@ def index():
         page = request.args.get('page', 1, type=int)
         per_page = min(request.args.get('per_page', 10, type=int), 100)
         users = User.to_collection_dict(User.query.order_by(User.last_edited.desc()), page, per_page, 'users.index')
-        #users = User.query.order_by(User.last_edited.desc()).limit(10).all()
         return render_template('users.html', users=users)
 
 @bp.route('/users/create', methods=('GET', 'POST'))
@@ -43,21 +42,16 @@ def create():
 @login_required
 @user_admin_required
 def search():
-    search_string = request.args.get('search_string', '')
-
-    page = request.args.get('page', 1, type=int)
-    per_page = min(request.args.get('per_page', 10, type=int), 100)
-
-    query = User.query.filter(
-        User.user_name.like(f"{search_string}%")
-    ).order_by(
-        User.user_name != search_string,
-        User.user_name.asc()
-    )
-
-    users = User.to_collection_dict(query, page, per_page, 'users.search', search_string=search_string)
-
-    return render_template('users.html', users=users)
+        search_string = request.args.get('search_string', '')
+        page = request.args.get('page', 1, type=int)
+        per_page = min(request.args.get('per_page', 10, type=int), 100)
+        users = User.to_collection_dict(User.query.filter(
+                User.user_name.like(f"{search_string}%")
+                ).order_by(
+                User.user_name != search_string,
+                User.user_name.asc()
+                ), page, per_page, 'users.search', search_string=search_string)
+        return render_template('users.html', users=users)
 
 @bp.route('/users/update/<string:id>', methods=('GET', 'POST'))
 @login_required

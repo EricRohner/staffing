@@ -1,5 +1,5 @@
-{% extends "customers.html" %}
-{% block customer_form %}
+{% extends "base.html" %}
+{% block display %}
     <article>
         <header class="container-h block color4f">
             <div class="block_bold">{{ customer['customer_name'] }}</div>
@@ -10,7 +10,7 @@
         </header>
     </article>
 
-    {% block job %}
+    {% block job_add %}
     {% endblock %}
     {% for job in jobs %}
     <article>
