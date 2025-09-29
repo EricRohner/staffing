@@ -1,4 +1,4 @@
-
+import secrets
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timezone
@@ -42,6 +42,8 @@ class User(paginated_mixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(25), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    api_token_id = db.Column(db.String(16), unique=True, nullable=True)
+    api_token_hash = db.Column(db.String(128), nullable=True)
     is_user_admin = db.Column(db.Boolean, default=False)
     is_provider_admin = db.Column(db.Boolean, default=False)
     is_customer_admin = db.Column(db.Boolean, default=False)
@@ -54,6 +56,24 @@ class User(paginated_mixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     
+    def generate_unique_token_id():
+        while True:
+            token_id = secrets.token_urlsafe(8)
+            if not User.query.filter_by(api_token_id=token_id).first():
+                return token_id
+
+    def generate_api_token(self):
+        raw_token = secrets.token_urlsafe(32)
+        token_id = User.generate_unique_token_id()
+        full_token = f"{token_id}.{raw_token}"
+        self.api_token_id = token_id
+        self.api_token_hash = generate_password_hash(raw_token)
+        db.session.commit()
+        return full_token
+
+    def check_token(self, token):
+        return check_password_hash(self.api_token_hash, token)
+
     def to_dict(self):
         data = {
             'id' : self.id,

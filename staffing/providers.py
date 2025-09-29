@@ -15,9 +15,9 @@ def index():
         page = request.args.get('page', 1, type=int)
         per_page = min(request.args.get('per_page', 10, type=int), 100)
         providers = Provider.to_collection_dict(Provider.query.order_by(Provider.last_edited.desc()), page, per_page, 'providers.index')
-        return render_template('providers.html', providers=providers)
+        return render_template('providers/providers.html', providers=providers)
 
-@bp.route('/providers/create', methods=("GET", "POST"))
+@bp.route('/providers/create', methods=["GET", "POST"])
 @login_required
 @provider_admin_required
 def create():
@@ -30,9 +30,9 @@ def create():
                         return redirect(url_for('providers.index'))
                 else:
                         flash('Provider email already exists.')                        
-        return render_template("providers_create.html")
+        return render_template("providers/providers_create.html")
 
-@bp.route('/providers/search', methods=('GET', 'POST'))
+@bp.route('/providers/search', methods=['GET', 'POST'])
 @login_required
 def search():
         search_string = request.args.get('search_string', '')
@@ -46,9 +46,9 @@ def search():
                 Provider.provider_name != search_string,
                 Provider.provider_email.asc()
                 ), page, per_page, 'providers.search', search_string=search_string)
-        return render_template('providers.html', providers=providers)
+        return render_template('providers/providers.html', providers=providers)
 
-@bp.route('/providers/update/<string:id>', methods=("GET", "POST"))
+@bp.route('/providers/update/<string:id>', methods=["GET", "POST"])
 @login_required
 @provider_admin_required
 def update(id):
@@ -66,7 +66,7 @@ def update(id):
                 flash("Provider updated.")
                 return redirect(url_for('providers.index'))
 
-        return render_template('providers_update.html', provider=provider)
+        return render_template('providers/providers_update.html', provider=provider)
 
 @bp.route('/providers/delete/<string:id>')
 @login_required

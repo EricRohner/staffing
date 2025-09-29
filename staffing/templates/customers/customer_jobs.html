@@ -20,7 +20,7 @@
                 {% if job.provider_id %}
                     <div class="block color3f">Provider: {{ job.provider.provider_name }}</div>
                 {% endif %}
-            <a class="prov_btn" href="{{ url_for('customers.customer_job_provider_search', customer_id=customer['id'], job_id=job['id']) }}">find a provider</a>
+            <a class="prov_btn left_margin" href="{{ url_for('customers.customer_job_provider_search', customer_id=customer['id'], job_id=job['id']) }}">find a provider</a>
         </header>
     </article>
     {% endfor %}

@@ -8,12 +8,12 @@ bp = Blueprint ('dashboard', __name__)
 ## Dashboard Routes
 ############################################################################################
 
-@bp.route('/dashboard')
+@bp.route('/dashboard', methods=['GET'])
 @login_required
 def index():
-        return render_template('dashboard.html')
+        return render_template('dashboard/dashboard.html')
 
-@bp.route('/dashboard/self_password_set', methods=('GET', 'POST'))
+@bp.route('/dashboard/self_password_set', methods=['GET', 'POST'])
 @login_required
 def self_password_set():
         if request.method == 'POST':
@@ -30,4 +30,13 @@ def self_password_set():
                         if not request.form.get('cancel'):
                                 flash("Current password incorrect.")
                         return redirect(url_for('dashboard.index'))
-        return render_template('dashboard_self_password_set.html')
+        return render_template('dashboard/dashboard_self_password_set.html')
+
+
+@bp.route('/dashboard/get_api_token', methods=['GET'])
+@login_required
+def get_api_token():
+    user = User.query.filter_by(user_name=session['user_name']).first()
+    token = user.generate_api_token()
+    return render_template('dashboard/dashboard.html', api_token=token)
+

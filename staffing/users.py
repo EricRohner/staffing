@@ -16,9 +16,9 @@ def index():
         page = request.args.get('page', 1, type=int)
         per_page = min(request.args.get('per_page', 10, type=int), 100)
         users = User.to_collection_dict(User.query.order_by(User.last_edited.desc()), page, per_page, 'users.index')
-        return render_template('users.html', users=users)
+        return render_template('users/users.html', users=users)
 
-@bp.route('/users/create', methods=('GET', 'POST'))
+@bp.route('/users/create', methods=['GET', 'POST'])
 @login_required
 @user_admin_required
 def create():
@@ -36,9 +36,9 @@ def create():
                         return redirect(url_for('users.index'))
                 else:
                         flash("User already exists")
-        return render_template('users_create.html')
+        return render_template('users/users_create.html')
 
-@bp.route('/users/search', methods=('GET', 'POST'))
+@bp.route('/users/search', methods=['GET', 'POST'])
 @login_required
 @user_admin_required
 def search():
@@ -51,9 +51,9 @@ def search():
                 User.user_name != search_string,
                 User.user_name.asc()
                 ), page, per_page, 'users.search', search_string=search_string)
-        return render_template('users.html', users=users)
+        return render_template('users/users.html', users=users)
 
-@bp.route('/users/update/<string:id>', methods=('GET', 'POST'))
+@bp.route('/users/update/<string:id>', methods=['GET', 'POST'])
 @login_required
 @user_admin_required
 def update(id):
@@ -76,9 +76,9 @@ def update(id):
                 db.session.commit()
                 flash("User updated.")
                 return redirect(url_for('users.index'))
-        return render_template('users_update.html', user=user)
+        return render_template('users/users_update.html', user=user)
 
-@bp.route('/users/set_password/<string:id>', methods=('GET', 'POST'))
+@bp.route('/users/set_password/<string:id>', methods=['GET', 'POST'])
 @login_required
 @user_admin_required
 def set_password(id):
@@ -92,10 +92,9 @@ def set_password(id):
                 db.session.commit()
                 flash(f"Password updated for {user.user_name}.")
                 return redirect(url_for('users.index'))
+        return render_template('users/users_set_password.html', user=user)      
 
-        return render_template('users_set_password.html', user=user)      
-
-@bp.route('/users/delete/<string:id>', methods=('GET', 'POST'))
+@bp.route('/users/delete/<string:id>', methods=['GET', 'POST'])
 @login_required
 @user_admin_required
 def delete(id):

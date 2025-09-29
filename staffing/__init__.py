@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask_migrate import Migrate
 from .models import db
 
 def create_app(test_config=None):
@@ -20,6 +21,7 @@ def create_app(test_config=None):
         pass
 
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     from . import auth, dashboard, users, providers, customers, api
     app.register_blueprint(api.bp)
@@ -30,6 +32,5 @@ def create_app(test_config=None):
     app.register_blueprint(customers.bp)
 
     app.add_url_rule('/', endpoint='index')
-    
     
     return app

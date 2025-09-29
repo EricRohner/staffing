@@ -16,10 +16,10 @@
             <div class="block_bold">{{ provider['provider_name'] }}</div>
             <div class="container-h">
                 <div class="email block">{{ provider['provider_email'] }}</div>
-                <div class="updated block">Updated: {{ provider['last_edited'].strftime('%Y-%m-%d') }}</div>
+                <div class="updated">Updated: {{ provider['last_edited'].strftime('%Y-%m-%d') }}</div>
             </div>
             {% if session['is_provider_admin'] %}
-                <a class="prov_btn" href="{{ url_for('providers.update', id=provider['id']) }}">Edit</a>
+                <a class="prov_btn left_margin" href="{{ url_for('providers.update', id=provider['id']) }}">Edit</a>
                 <a class="prov_btn" onclick="return confirm('Are you sure?');" href="{{ url_for('providers.delete', id=provider['id']) }}">Delete</a>
             {% endif %}
         </header>

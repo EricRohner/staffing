@@ -7,8 +7,21 @@
 {% block body %}  
         <div class="container-v color1f block fill_w">
             <form class="color1f" action="{{ url_for('dashboard.self_password_set') }}" method="get">
-                <input class="dash_btn" type="submit" value="Set Password" >
+                <input class="dash_btn" type="submit" value="Set Password">
             </form>
+
+            <form class="color1f" action="{{ url_for('dashboard.get_api_token') }}" method="get">
+                <input class="dash_btn" type="submit" value="Get API token">
+            </form>
+
+            
+    {% if api_token %}
+    <div class="block color1f">
+        <div>Your new API token: {{ api_token }}</div>
+        <input class="dash_btn" onclick="navigator.clipboard.writeText('{{ api_token }}')" type="submit" value="Copy token to clipboard">
+    </div>
+    {% endif %}
+
 
             {% block pass_form%}
             {% endblock %}

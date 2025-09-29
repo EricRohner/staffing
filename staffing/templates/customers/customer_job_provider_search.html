@@ -1,14 +1,14 @@
-{% extends "customer_jobs.html" %}
+{% extends "customers/customer_jobs.html" %}
 
 {% block provider_search %}
 <div class="color3f">
-    <form class="block" method="POST" action="{{ url_for('customers.customer_job_provider_search', customer_id = customer.id, job_id = jobs[0]['id'] ) }}">
+    <form class="block" method="GET" action="{{ url_for('customers.customer_job_provider_search', customer_id = customer.id, job_id = jobs[0]['id'] ) }}">
         <input class="prov_btn" type="submit" value="Search">
         <input name="search_string" value="" required>
     </form>
 </div>
 
-{% for provider in providers %}
+{% for provider in providers['items'] %}
         <article class="color3f">
         <header class="container-h block color3f">
             <div class="block_bold">{{ provider['provider_name'] }}</div>
@@ -21,7 +21,16 @@
             {% endif %}
         </header>
         </article>
-    {% endfor %}
+{% endfor %}
+<div class="container-h block color3">
+    {% if providers['_links']['prev'] %}
+        <a class="prov_btn" href="{{ providers['_links']['prev'] }}">Previous</a>
+    {% endif %}
+
+    {% if providers['_links']['next'] %}
+        <a class="prov_btn" href="{{ providers['_links']['next'] }}">Next</a>
+    {% endif %}
+    </div>
 
 {% endblock %}
 

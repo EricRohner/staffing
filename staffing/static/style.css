@@ -30,8 +30,8 @@ a, input {
     width: 100%
 }
 
-.button {
-  width: fit-content;
+.left_margin {
+    margin-left: 8px;
 }
 
 /*Fill and shape*/
