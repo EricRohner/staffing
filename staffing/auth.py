@@ -8,10 +8,12 @@ bp = Blueprint ('auth', __name__)
 ## Auth Routes
 ############################################################################################
 
+#Index
 @bp.route('/')
 def index():
     return render_template('auth.html')
 
+#Log In
 @bp.route('/login', methods=['POST'])
 def login():
     user_name = request.form['user_name']
@@ -27,6 +29,7 @@ def login():
         session[key] = value
     return redirect(url_for("dashboard.index"))
 
+#Log Out
 @bp.route('/logout')
 def logout():
     session.clear()
@@ -37,6 +40,7 @@ def logout():
 ## View Decorators
 ############################################################################################
 
+#Require log in
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
@@ -46,6 +50,7 @@ def login_required(view):
         return view(**kwargs)
     return wrapped_view
 
+#Require passed in required role be True for logged in user
 def admin_required(required_role, redirect_to):
     def decorator(view):
         @functools.wraps(view)
@@ -61,6 +66,7 @@ def admin_required(required_role, redirect_to):
 ## API Decorators
 ############################################################################################
 
+#Require a valid token from a user with the passed in required role equal to True
 def require_token_with_role(required_role):
     def decorator(view):
         @functools.wraps(view)
@@ -68,19 +74,14 @@ def require_token_with_role(required_role):
             token = request.headers.get('X-API-Token')
             if not token or '.' not in token:
                 abort(403, description="Missing or malformed token")
-
             token_id, raw_token = token.split('.', 1)
             user = User.query.filter_by(api_token_id=token_id).first()
-
             if not user:
                 abort(403, description="Token ID not found")
-
             if not user.check_token(raw_token):
                 abort(403, description="Token not accepted")
-
             if not getattr(user, required_role, False):
                 abort(403, description=f"User does not have required role: {required_role}")
-
             return view(**kwargs)
         return wrapped_view
     return decorator

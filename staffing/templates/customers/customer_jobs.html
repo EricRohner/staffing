@@ -1,35 +1,33 @@
 {% extends "base.html" %}
-{% block display %}
+{% block body %}
     <article>
         <header class="container-h block color4f">
             <div class="block_bold">{{ customer['customer_name'] }}</div>
             <div class="block">{{ customer['customer_address'] }}</div>
             {% if session['is_job_admin'] %}
-                <a class="cust_btn" href="{{ url_for('customers.customer_jobs_add', customer_id=customer['id']) }}">Add a job</a>
+                <a class="cust_btn" href="{{ url_for('customers.customer_jobs_create', customer_id=customer['id']) }}">Add a job</a>
             {% endif %}
         </header>
     </article>
 
-    {% block job_add %}
-    {% endblock %}
     {% for job in jobs['items'] %}
     <article>
-        <header class="container-h block color3f">
+        <header class="container-h block color2f">
             <div class="block_bold">{{ job['job_title'] }}</div>
             <div class="block">{{ job['job_start_date'] }}</div>
                 {% if job['provider_id'] %}
-                    <div class="block color3f">Provider: {{ job['provider_name'] }}</div>
-                    <a class="prov_btn left_margin" href="{{ url_for('customers.customer_job_remove_provider', customer_id=customer['id'], job_id=job['id']) }}">Remove provider</a>
+                    <div class="block color3">Provider: {{ job['provider_name'] }}</div>
+                    <a class="job_btn left_margin" href="{{ url_for('customers.customer_job_remove_provider', customer_id=customer['id'], job_id=job['id']) }}">Remove provider</a>
                 {% endif %}
-                <a class="prov_btn left_margin" href="{{ url_for('customers.delete_job', customer_id=customer['id'], job_id=job['id']) }}">Delete job</a>
                 {% if session['is_job_admin'] and not job['provider.id'] %}
-                    <a class="prov_btn left_margin" href="{{ url_for('customers.customer_job_provider_search', customer_id=customer['id'], job_id=job['id']) }}">find a provider</a>
+                    <a class="job_btn left_margin" href="{{ url_for('customers.customer_job_provider_search', customer_id=customer['id'], job_id=job['id']) }}">find a provider</a>
                 {% endif %}
+                <a class="job_btn left_margin" href="{{ url_for('customers.delete_job', customer_id=customer['id'], job_id=job['id']) }}">Delete job</a>
         </header>
     </article>
     {% endfor %}
 
-    <div class="container-h block color3f">
+    <div class="container-h block color2">
     {% if jobs['_links']['prev'] %}
         <a class="prov_btn" href="{{ jobs['_links']['prev'] }}">Previous</a>
     {% endif %}
@@ -38,8 +36,5 @@
         <a class="prov_btn" href="{{ jobs['_links']['next'] }}">Next</a>
     {% endif %}
     </div>
-
-    {% block provider_search %}
-    {% endblock %}
 
 {% endblock %}

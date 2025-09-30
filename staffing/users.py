@@ -9,6 +9,7 @@ bp = Blueprint ('users', __name__)
 ## User Routes
 ############################################################################################
 
+#Index
 @bp.route('/users')
 @login_required
 def index():
@@ -19,6 +20,7 @@ def index():
                 users = User.to_collection_dict(User.query.order_by(User.last_edited.desc()), page, per_page, 'users.index')
         return render_template('users/users.html', users=users)
 
+#Create
 @bp.route('/users/create', methods=['GET', 'POST'])
 @login_required
 @admin_required('is_user_admin', 'users.index')
@@ -40,6 +42,7 @@ def create():
                         flash("User already exists")
         return render_template('users/users_create.html')
 
+#Search
 @bp.route('/users/search', methods=['GET', 'POST'])
 @login_required
 @admin_required('is_user_admin', 'users.index')
@@ -55,6 +58,7 @@ def search():
                 ), page, per_page, 'users.search', search_string=search_string)
         return render_template('users/users.html', users=users)
 
+#Update
 @bp.route('/users/update/<string:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required('is_user_admin', 'users.index')
@@ -69,7 +73,7 @@ def update(id):
                         flash("User name must be unique.")
                         return redirect(url_for('users.index'))
                 
-                #HTML behavior only includes the checkbox name if true so we explicitly define the values by whether the checkbox is in the form data
+                #HTML only returns the checkbox name if checked so explicitly define values based on if checkbox name is in the form data
                 form_data = request.form.to_dict()
                 form_data['is_user_admin'] = 'user_admin' in request.form
                 form_data['is_provider_admin'] = 'provider_admin' in request.form
@@ -81,6 +85,7 @@ def update(id):
                 return redirect(url_for('users.index'))
         return render_template('users/users_update.html', user=user)
 
+#Set Password
 @bp.route('/users/set_password/<string:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required('is_user_admin', 'users.index')
@@ -97,6 +102,7 @@ def set_password(id):
                 return redirect(url_for('users.index'))
         return render_template('users/users_set_password.html', user=user)      
 
+#Delete
 @bp.route('/users/delete/<string:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required('is_user_admin', 'users.index')

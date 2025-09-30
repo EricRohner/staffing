@@ -98,10 +98,20 @@ a, input {
     border-radius: 6px;
 }
 
+.job_btn {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    padding: 3px 3px;
+    display: inline-block;
+    border: 2px solid #d49372;
+    border-radius: 6px;
+}
+
 /*Colors*/
 
 .flash {
-    background-color: #d49372
+    background-color: #ffffff;
 }
 
 .color0 {
@@ -121,11 +131,11 @@ a, input {
 }
 
 .color2 {
-    background-color: #f8c288;
+    background-color: #d49372;
 }
 
 .color2f {
-    background-color: #fce1c4;
+    background-color: #eac9b9;
 }
 
 .color3 {
@@ -145,5 +155,9 @@ a, input {
 }
 
 .color5 {
-    background-color: #a4aab4;
+    background-color: #f8c288;
+}
+
+.color5f {
+    background-color: #fce1c4;
 }

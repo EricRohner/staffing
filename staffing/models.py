@@ -10,7 +10,7 @@ db = SQLAlchemy()
 ## Mixins
 ############################################################################################
 
-class paginated_mixin(object):
+class paginated(object):
     @staticmethod
     def to_collection_dict(query, page, per_page, endpoint, **kwargs):
         resources = db.paginate(query, page=page, per_page=per_page,
@@ -38,7 +38,7 @@ class paginated_mixin(object):
 ## User Model
 ############################################################################################
 
-class User(paginated_mixin, db.Model):
+class User(paginated, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(25), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
@@ -103,7 +103,7 @@ class User(paginated_mixin, db.Model):
 ## Provider Model
 ############################################################################################
 
-class Provider(paginated_mixin, db.Model):
+class Provider(paginated, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     provider_name = db.Column(db.String(25), nullable=False)
     provider_email = db.Column(db.String(25), unique=True, nullable=False)
@@ -133,7 +133,7 @@ class Provider(paginated_mixin, db.Model):
 ## Customer Model
 ############################################################################################
 
-class Customer(paginated_mixin, db.Model):
+class Customer(paginated, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String(25), unique=True, nullable=False)
     customer_address = db.Column(db.String(25), nullable=False)
@@ -163,7 +163,7 @@ class Customer(paginated_mixin, db.Model):
 ## Job Model
 ############################################################################################
 
-class Job(paginated_mixin, db.Model):
+class Job(paginated, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     job_title = db.Column(db.String(25), nullable=False)
     job_start_date = db.Column(db.Date, nullable=False)
@@ -183,7 +183,7 @@ class Job(paginated_mixin, db.Model):
             'provider_id' : self.provider_id,
             'created' : self.created,
             'last_edited' : self.last_edited,
-            'provider_name': self.provider.provider_name if self.provider else None
+            'provider_name': self.provider.provider_name if self.provider_id else None
         }
         return data
     

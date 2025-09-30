@@ -9,6 +9,7 @@ bp = Blueprint ('providers', __name__)
 ## Provider Routes
 ############################################################################################
 
+#Index
 @bp.route('/providers')
 @login_required
 def index():
@@ -17,6 +18,7 @@ def index():
         providers = Provider.to_collection_dict(Provider.query.order_by(Provider.last_edited.desc()), page, per_page, 'providers.index')
         return render_template('providers/providers.html', providers=providers)
 
+#Create
 @bp.route('/providers/create', methods=["GET", "POST"])
 @login_required
 @admin_required('is_provider_admin', 'providers.index')
@@ -32,6 +34,7 @@ def create():
                         flash('Provider email already exists.')                        
         return render_template("providers/providers_create.html")
 
+#Search
 @bp.route('/providers/search', methods=['GET', 'POST'])
 @login_required
 def search():
@@ -48,6 +51,7 @@ def search():
                 ), page, per_page, 'providers.search', search_string=search_string)
         return render_template('providers/providers.html', providers=providers)
 
+#Update
 @bp.route('/providers/update/<string:id>', methods=["GET", "POST"])
 @login_required
 @admin_required('is_provider_admin', 'providers.index')
@@ -68,6 +72,7 @@ def update(id):
 
         return render_template('providers/providers_update.html', provider=provider)
 
+#Delete
 @bp.route('/providers/delete/<string:id>')
 @login_required
 @admin_required('is_provider_admin', 'providers.index')

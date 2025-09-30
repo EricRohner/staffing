@@ -8,11 +8,13 @@ bp = Blueprint ('dashboard', __name__)
 ## Dashboard Routes
 ############################################################################################
 
+#index
 @bp.route('/dashboard', methods=['GET'])
 @login_required
 def index():
         return render_template('dashboard/dashboard.html')
 
+#Self password set
 @bp.route('/dashboard/self_password_set', methods=['GET', 'POST'])
 @login_required
 def self_password_set():
@@ -32,7 +34,7 @@ def self_password_set():
                         return redirect(url_for('dashboard.index'))
         return render_template('dashboard/dashboard_self_password_set.html')
 
-
+#Get API token
 @bp.route('/dashboard/get_api_token', methods=['GET'])
 @login_required
 def get_api_token():

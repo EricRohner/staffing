@@ -9,6 +9,7 @@ bp = Blueprint ('customers', __name__)
 ## Customer Routes
 ############################################################################################
 
+#Index
 @bp.route('/customers')
 @login_required
 def index():
@@ -17,6 +18,7 @@ def index():
         customers = Customer.to_collection_dict(Customer.query.order_by(Customer.last_edited.desc()), page, per_page, 'customers.index')
         return render_template('customers/customers.html', customers=customers)
 
+#Create
 @bp.route('/customers/create', methods=["GET", "POST"])
 @login_required
 @admin_required('is_customer_admin', 'customers.index')
@@ -32,6 +34,7 @@ def create():
                         flash('customer name already exists.')                 
         return render_template("customers/customers_create.html")
 
+#Search
 @bp.route('/customers/search', methods=['GET', 'POST'])
 @login_required
 def search():
@@ -46,6 +49,7 @@ def search():
                 ), page, per_page, 'customers.search', search_string=search_string)
         return render_template('customers/customers.html', customers = customers)
 
+#Update Customer
 @bp.route('/customers/update/<string:customer_id>', methods = ["GET", "POST"])
 @login_required
 @admin_required('is_customer_admin', 'customers.index')
@@ -65,6 +69,7 @@ def update(customer_id):
                 return redirect(url_for('customers.index'))
         return render_template('customers/customers_update.html', customer = customer)
 
+#Delete Customer and all attached jobs
 @bp.route('/customers/delete/<string:customer_id>')
 @login_required
 @admin_required('is_customer_admin', 'customers.index')
@@ -80,6 +85,29 @@ def delete(customer_id):
         flash(f"Customer {customer.customer_name} has been deleted.")
         return redirect(url_for('customers.index'))
 
+############################################################################################
+## Jobs Routes
+############################################################################################
+
+#Create Job
+@bp.route('/customers/customer_jobs_create/<string:customer_id>', methods = ["GET", "POST"])
+@login_required
+@admin_required('is_job_admin', 'customers.index')
+def customer_jobs_create(customer_id):
+        customer = Customer.query.filter_by(id = customer_id).first()
+        if not customer:
+                flash("Customer not found")
+                return redirect(url_for('customers.index'))
+        if request.method == "POST":
+                job = Job()
+                job.customer_id = customer_id
+                job.from_dict(request.form)
+                db.session.add(job)
+                db.session.commit()
+                return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
+        return render_template('customers/customer_jobs_create.html', customer=customer)
+
+#Display single user and all attached jobs
 @bp.route('/customers/customer_jobs/<string:customer_id>')
 @login_required
 def customer_jobs(customer_id):
@@ -92,24 +120,7 @@ def customer_jobs(customer_id):
         jobs = Job.to_collection_dict(Job.query.filter_by(customer_id=customer_id), page, per_page, 'customers.customer_jobs', customer_id=customer_id)
         return render_template('customers/customer_jobs.html', customer = customer, jobs = jobs)
 
-@bp.route('/customers/customer_jobs_add/<string:customer_id>', methods = ["GET", "POST"])
-@login_required
-@admin_required('is_job_admin', 'customers.index')
-def customer_jobs_add(customer_id):
-        customer = Customer.query.filter_by(id = customer_id).first()
-        if not customer:
-                flash("Customer not found")
-                return redirect(url_for('customers.index'))
-        if request.method == "POST":
-                print(request.form['job_title'])
-                job = Job()
-                job.customer_id = customer_id
-                job.from_dict(request.form)
-                db.session.add(job)
-                db.session.commit()
-                return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
-        return render_template('customers/customer_jobs_add.html', customer=customer)
-
+#Display single user, single job, search for a provider
 @bp.route('/customers/customer_job_provider_search/<string:customer_id>/<string:job_id>', methods = ["GET", "POST"])
 @login_required
 def customer_job_provider_search(customer_id, job_id):
@@ -131,8 +142,9 @@ def customer_job_provider_search(customer_id, job_id):
                 Provider.provider_name != search_string,
                 Provider.provider_email.asc()
                 ), page, per_page, 'customers.customer_job_provider_search', customer_id=customer_id, job_id=job_id, search_string=search_string)
-        return render_template('customers/customer_job_provider_search.html', customer = customer, jobs = [job], providers = providers)
+        return render_template('customers/customer_job_provider_search.html', customer = customer, job = job, providers = providers)
 
+#Assign provider to job
 @bp.route('/customers/customer_job_assign_provider/<string:customer_id>/<string:job_id>/<string:provider_id>')
 @login_required
 @admin_required('is_job_admin', 'customers.index')
@@ -152,6 +164,7 @@ def customer_job_assign_provider(customer_id, job_id, provider_id):
         flash("Provider assigned to job.")
         return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
 
+#Remove provider from a job
 @bp.route('/customers/customer_job_remove_provider/<string:customer_id>/<string:job_id>')
 @login_required
 @admin_required('is_job_admin', 'customers.index')
@@ -165,6 +178,7 @@ def customer_job_remove_provider(customer_id, job_id):
         db.session.commit()
         return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
 
+#Delete job
 @bp.route('/customers/delete_job/<string:customer_id>/<string:job_id>')
 @login_required
 @admin_required('is_job_admin', 'customers.index')

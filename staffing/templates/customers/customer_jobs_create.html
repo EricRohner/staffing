@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block form %}
+<article>
+        <header class="container-h block color4f">
+            <div class="block_bold">{{ customer['customer_name'] }}</div>
+            <div class="block">{{ customer['customer_address'] }}</div>
+        </header>
+    </article>
+
+<div class="color2f">
+    <div class="container-h block">
+    <form method="post">
+        <label class="block">Job title
+            <input name="job_title" value="" required>
+            <input name="job_start_date" type="date" required>
+        </label>
+
+            <input class="job_btn" type="submit" value="Save">
+    </form>
+    <form class="container-h" method="get" action="{{ url_for('customers.customer_jobs', customer_id=customer.id) }}">
+        <input class="job_btn" type="submit" value="Cancel" onclick="return confirm('Are you sure?');" formnovalidate>
+    </form>
+    </div>
+</div>
+{% endblock %}
