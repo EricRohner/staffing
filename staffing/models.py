@@ -106,7 +106,7 @@ class User(paginated, db.Model):
 class Provider(paginated, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     provider_name = db.Column(db.String(25), nullable=False)
-    provider_email = db.Column(db.String(25), unique=True, nullable=False)
+    provider_email = db.Column(db.String(50), unique=True, nullable=False)
     created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
@@ -135,8 +135,8 @@ class Provider(paginated, db.Model):
 
 class Customer(paginated, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    customer_name = db.Column(db.String(25), unique=True, nullable=False)
-    customer_address = db.Column(db.String(25), nullable=False)
+    customer_name = db.Column(db.String(100), unique=True, nullable=False)
+    customer_address = db.Column(db.String(100), nullable=False)
     created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 

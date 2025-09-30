@@ -16,6 +16,8 @@ def create_user():
     data = request.get_json()
     if 'user_name' not in data or 'password' not in data:
         abort(400, description="Missing one or more user field in request data")
+    if len(data['user_name']) > 25:
+        abort(400, description="user_name must be 25 characters or fewer")
     if User.query.filter_by(user_name=data['user_name']).first():
         abort(400, description="user_name already taken")
     user = User()
@@ -42,6 +44,8 @@ def get_users():
 def update_user(id):
     data = request.get_json()
     user = db.get_or_404(User, id)
+    if len(data['user_name']) > 25:
+        abort(400, description="user_name must be 25 characters or fewer")
     collision = User.query.filter_by(user_name=data['user_name']).first()
     if collision and collision.id != id:
         abort(400, description="user_name already taken")
@@ -70,6 +74,10 @@ def create_provider():
     data = request.get_json()
     if 'provider_name' not in data or 'provider_email' not in data:
         abort(400, description="Missing one or more user field in request data")
+    if len(data['provider_name']) > 25:
+        abort(400, description="provider_name must be 25 characters or fewer")
+    if len(data['provider_email']) > 50:
+        abort(400, description="user_name must be 50 characters or fewer")
     if Provider.query.filter_by(provider_email=data['provider_email']).first():
         abort(400, description="provider_email already taken")
     provider = Provider()
@@ -96,9 +104,15 @@ def get_providers():
 def update_provider(id):
     data = request.get_json()
     provider = db.get_or_404(Provider, id)
-    collision = Provider.query.filter_by(provider_email=data['provider_email']).first()
-    if collision and collision.id != id:
-        abort(400, description="provider_email already taken")
+    if 'provider_name' in data:
+        if len(data['provider_name']) > 25:
+            abort(400, description="provider_name must be 25 characters or fewer")
+    if 'provider_email' in data:
+        if len(data['provider_email']) > 50:
+            abort(400, description="provider_email must be 50 characters or fewer")
+        collision = Provider.query.filter_by(provider_email=data['provider_email']).first()
+        if collision and collision.id != id:
+            abort(400, description="provider_email already taken")
     provider.from_dict(data)
     db.session.add(provider)
     db.session.commit()
@@ -124,6 +138,10 @@ def create_customer():
     data = request.get_json()
     if 'customer_name' not in data or 'customer_address' not in data:
         abort(400, description="Missing one or more user field in request data")
+    if len(data['customer_name']) > 100:
+        abort(400, description="customer_name must be 100 characters or fewer")
+    if len(data['customer_address']) > 100:
+        abort(400, description="customer_address must be 100 characters or fewer")
     if Customer.query.filter_by(customer_name=data['customer_name']).first():
         abort(400, description="customer_name already taken")
     customer = Customer()
@@ -150,9 +168,15 @@ def get_customers():
 def update_customer(id):
     data = request.get_json()
     customer = db.get_or_404(Customer, id)
-    collision = Customer.query.filter_by(customer_name=data['customer_name']).first()
-    if collision and collision.id != id:
-        abort(400, description="customer_name already taken")
+    if 'customer_name' in data:
+        if len(data['customer_name']) > 100:
+            abort(400, description="customer_name must be 100 characters or fewer")
+        collision = Customer.query.filter_by(customer_name=data['customer_name']).first()
+        if collision and collision.id != id:
+            abort(400, description="customer_name already taken")
+    if 'customer_address' in data:
+        if len(data['customer_address']) > 100:
+            abort(400, description="customer_address must be 100 characters or fewer")
     customer.from_dict(data)
     db.session.add(customer)
     db.session.commit()
@@ -180,6 +204,10 @@ def create_job():
     data = request.get_json()
     if 'job_title' not in data or 'job_start_date' not in data or 'customer_id' not in data:
         abort(400, description="Missing one or more user field in request data")
+    if len(data['job_title']) > 25:
+        abort(400, description="job_title must be 25 characters or fewer")
+    if not Customer.query.filter_by(id=data['customer_id']).first():
+        abort(400, description="customer_id not found")
     try:
         datetime.strptime(data['job_start_date'], "%Y-%m-%d").date()
     except ValueError:
@@ -196,7 +224,7 @@ def get_job(id):
        return db.get_or_404(Job, id).to_dict()
 
 #Read paginated jobs belonging to a single customer
-@bp.route('/api/jobs_by_customer_id/<int:customer_id>', methods=['GET'])
+@bp.route('/api/jobs/by_customer_id/<int:customer_id>', methods=['GET'])
 def get_jobs_by_customer(customer_id):
     db.get_or_404(Customer, customer_id)
     page = request.args.get('page', 1, type=int)
@@ -209,10 +237,15 @@ def get_jobs_by_customer(customer_id):
 @require_token_with_role('is_job_admin')
 def update_job(id):
     data = request.get_json()
-    if 'customer_id' in data:   
-        job = db.session.get(Job, id)
-        if job is None:
-            abort(404, description=f"Job with ID {id} not found")
+    job = db.session.get(Job, id)
+    if job is None:
+        abort(404, description=f"Job with ID {id} not found")
+    if 'customer_id' in data:
+        if not Customer.query.filter_by(id=data['customer_id']).first():
+            abort(400, description="customer_id not found")
+    if 'job_title' in data:
+        if len(data['job_title']) > 25:
+            abort(400, description="job_title must be 25 characters or fewer")
     if 'job_start_date' in data: 
         try:
             datetime.strptime(data['job_start_date'], "%Y-%m-%d").date()
