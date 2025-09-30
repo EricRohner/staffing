@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, session, redirect, render_template, request, url_for
 from datetime import datetime, timezone
-from .auth import login_required, user_admin_required
+from .auth import login_required, admin_required
 from .models import db, User
 
 bp = Blueprint ('users', __name__)
@@ -11,16 +11,17 @@ bp = Blueprint ('users', __name__)
 
 @bp.route('/users')
 @login_required
-@user_admin_required
 def index():
-        page = request.args.get('page', 1, type=int)
-        per_page = min(request.args.get('per_page', 10, type=int), 100)
-        users = User.to_collection_dict(User.query.order_by(User.last_edited.desc()), page, per_page, 'users.index')
+        users = {"items": [], "_links": {}}
+        if session['is_user_admin']:
+                page = request.args.get('page', 1, type=int)
+                per_page = min(request.args.get('per_page', 10, type=int), 100)
+                users = User.to_collection_dict(User.query.order_by(User.last_edited.desc()), page, per_page, 'users.index')
         return render_template('users/users.html', users=users)
 
 @bp.route('/users/create', methods=['GET', 'POST'])
 @login_required
-@user_admin_required
+@admin_required('is_user_admin', 'users.index')
 def create():
         if request.method == 'POST':
                 if not User.query.filter_by(user_name=request.form['user_name']).first():
@@ -30,6 +31,7 @@ def create():
                         form_data['is_user_admin'] = 'user_admin' in request.form
                         form_data['is_provider_admin'] = 'provider_admin' in request.form
                         form_data['is_customer_admin'] = 'customer_admin' in request.form
+                        form_data['is_job_admin'] = 'job_admin' in request.form
                         user.from_dict(form_data, new_user=False)
                         db.session.add(user)
                         db.session.commit()
@@ -40,7 +42,7 @@ def create():
 
 @bp.route('/users/search', methods=['GET', 'POST'])
 @login_required
-@user_admin_required
+@admin_required('is_user_admin', 'users.index')
 def search():
         search_string = request.args.get('search_string', '')
         page = request.args.get('page', 1, type=int)
@@ -55,7 +57,7 @@ def search():
 
 @bp.route('/users/update/<string:id>', methods=['GET', 'POST'])
 @login_required
-@user_admin_required
+@admin_required('is_user_admin', 'users.index')
 def update(id):
         user = User.query.filter_by(id=id).first()
         if not user:
@@ -72,6 +74,7 @@ def update(id):
                 form_data['is_user_admin'] = 'user_admin' in request.form
                 form_data['is_provider_admin'] = 'provider_admin' in request.form
                 form_data['is_customer_admin'] = 'customer_admin' in request.form
+                form_data['is_job_admin'] = 'job_admin' in request.form
                 user.from_dict(form_data, new_user=False)
                 db.session.commit()
                 flash("User updated.")
@@ -80,7 +83,7 @@ def update(id):
 
 @bp.route('/users/set_password/<string:id>', methods=['GET', 'POST'])
 @login_required
-@user_admin_required
+@admin_required('is_user_admin', 'users.index')
 def set_password(id):
         user = User.query.filter_by(id=id).first()
         if not user:
@@ -96,7 +99,7 @@ def set_password(id):
 
 @bp.route('/users/delete/<string:id>', methods=['GET', 'POST'])
 @login_required
-@user_admin_required
+@admin_required('is_user_admin', 'users.index')
 def delete(id):
         user = User.query.filter_by(id=id).first()
         if not user:

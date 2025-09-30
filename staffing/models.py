@@ -47,6 +47,7 @@ class User(paginated_mixin, db.Model):
     is_user_admin = db.Column(db.Boolean, default=False)
     is_provider_admin = db.Column(db.Boolean, default=False)
     is_customer_admin = db.Column(db.Boolean, default=False)
+    is_job_admin = db.Column(db.Boolean, default=False)
     created = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     last_edited = db.Column(db.DateTime, default=datetime.now(timezone.utc))
 
@@ -56,6 +57,7 @@ class User(paginated_mixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     
+    @staticmethod
     def generate_unique_token_id():
         while True:
             token_id = secrets.token_urlsafe(8)
@@ -81,13 +83,14 @@ class User(paginated_mixin, db.Model):
             'is_user_admin' : self.is_user_admin,
             'is_provider_admin' : self.is_provider_admin,
             'is_customer_admin' : self.is_customer_admin,
+            'is_job_admin' : self.is_job_admin,
             'created' : self.created,
             'last_edited' : self.last_edited
         }
         return data
     
     def from_dict(self, data, new_user=False):
-        for field in ['user_name', 'is_user_admin', 'is_provider_admin', 'is_customer_admin']:
+        for field in ['user_name', 'is_user_admin', 'is_provider_admin', 'is_customer_admin', 'is_job_admin']:
             if field in data:
                 setattr(self, field, data[field])
         if 'password' in data:

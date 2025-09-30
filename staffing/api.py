@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, request, abort, url_for
 from .models import db, User, Provider, Customer, Job
+from .auth import require_token_with_role
 
 bp = Blueprint ('api', __name__)
 
@@ -10,9 +11,10 @@ bp = Blueprint ('api', __name__)
 
 #Create
 @bp.route('/api/users', methods=['POST'])
+@require_token_with_role('is_user_admin')
 def create_user():
     data = request.get_json()
-    if 'user_name' not in data or 'password' not in data or 'is_user_admin' not in data or 'is_provider_admin' not in data or 'is_customer_admin' not in data:
+    if 'user_name' not in data or 'password' not in data:
         abort(400, description="Missing one or more user field in request data")
     if User.query.filter_by(user_name=data['user_name']).first():
         abort(400, description="user_name already taken")
@@ -36,6 +38,7 @@ def get_users():
 
 #Update
 @bp.route('/api/users/<int:id>', methods=['PUT'])
+@require_token_with_role('is_user_admin')
 def update_user(id):
     data = request.get_json()
     user = db.get_or_404(User, id)
@@ -49,6 +52,7 @@ def update_user(id):
 
 #Delete
 @bp.route('/api/users/<id>', methods=['DELETE'])
+@require_token_with_role('is_user_admin')
 def delete_user(id):
     user = db.get_or_404(User, id)
     db.session.delete(user)
@@ -61,6 +65,7 @@ def delete_user(id):
 
 #Create
 @bp.route('/api/providers', methods=['POST'])
+@require_token_with_role('is_provider_admin')
 def create_provider():
     data = request.get_json()
     if 'provider_name' not in data or 'provider_email' not in data:
@@ -78,8 +83,16 @@ def create_provider():
 def get_provider(id):
        return db.get_or_404(Provider, id).to_dict()
 
+#Read providers paginated
+@bp.route('/api/providers', methods=['GET'])
+def get_providers():
+    page = request.args.get('page', 1, type=int)
+    per_page = min(request.args.get('per_page', 10, type=int), 100)
+    return Provider.to_collection_dict(db.select(Provider), page, per_page, 'api.get_providers')
+
 #Update
 @bp.route('/api/providers/<int:id>', methods=['PUT'])
+@require_token_with_role('is_provider_admin')
 def update_provider(id):
     data = request.get_json()
     provider = db.get_or_404(Provider, id)
@@ -93,6 +106,7 @@ def update_provider(id):
 
 #Delete
 @bp.route('/api/providers/<id>', methods=['DELETE'])
+@require_token_with_role('is_provider_admin')
 def delete_provider(id):
     provider = db.get_or_404(Provider, id)
     db.session.delete(provider)
@@ -105,6 +119,7 @@ def delete_provider(id):
 
 #Create
 @bp.route('/api/customers', methods=['POST'])
+@require_token_with_role('is_customer_admin')
 def create_customer():
     data = request.get_json()
     if 'customer_name' not in data or 'customer_address' not in data:
@@ -122,8 +137,16 @@ def create_customer():
 def get_customer(id):
     return db.get_or_404(Customer, id).to_dict()
 
+#Read customers paginated
+@bp.route('/api/customers', methods=['GET'])
+def get_customers():
+    page = request.args.get('page', 1, type=int)
+    per_page = min(request.args.get('per_page', 10, type=int), 100)
+    return Customer.to_collection_dict(db.select(Customer), page, per_page, 'api.get_customers')
+
 #Update
 @bp.route('/api/customers/<int:id>', methods=['PUT'])
+@require_token_with_role('is_customer_admin')
 def update_customer(id):
     data = request.get_json()
     customer = db.get_or_404(Customer, id)
@@ -137,6 +160,7 @@ def update_customer(id):
 
 #Delete
 @bp.route('/api/customers/<id>', methods=['DELETE'])
+@require_token_with_role('is_customer_admin')
 def delete_customer(id):
     customer = db.get_or_404(Customer, id)
     for job in customer.jobs:
@@ -151,6 +175,7 @@ def delete_customer(id):
 
 #Create
 @bp.route('/api/jobs', methods=['POST'])
+@require_token_with_role('is_job_admin')
 def create_job():
     data = request.get_json()
     if 'job_title' not in data or 'job_start_date' not in data or 'customer_id' not in data:
@@ -170,10 +195,24 @@ def create_job():
 def get_job(id):
        return db.get_or_404(Job, id).to_dict()
 
+#Read paginated jobs belonging to a single customer
+@bp.route('/api/jobs_by_customer_id/<int:customer_id>', methods=['GET'])
+def get_jobs_by_customer(customer_id):
+    db.get_or_404(Customer, customer_id)
+    page = request.args.get('page', 1, type=int)
+    per_page = min(request.args.get('per_page', 10, type=int), 100)
+    return Job.to_collection_dict(db.select(Job).filter_by(customer_id=customer_id), page, per_page, 'api.get_jobs_by_customer', customer_id=customer_id)
+
+
 #Update
 @bp.route('/api/jobs/<int:id>', methods=['PUT'])
+@require_token_with_role('is_job_admin')
 def update_job(id):
     data = request.get_json()
+    if 'customer_id' in data:   
+        job = db.session.get(Job, id)
+        if job is None:
+            abort(404, description=f"Job with ID {id} not found")
     if 'job_start_date' in data: 
         try:
             datetime.strptime(data['job_start_date'], "%Y-%m-%d").date()
@@ -187,6 +226,7 @@ def update_job(id):
 
 #Delete
 @bp.route('/api/jobs/<id>', methods=['DELETE'])
+@require_token_with_role('is_job_admin')
 def delete_job(id):
     job = db.get_or_404(Job, id)
     db.session.delete(job)

@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from datetime import datetime, timezone
-from .auth import login_required, customer_admin_required
+from .auth import login_required, admin_required
 from .models import db, Customer, Job, Provider
 
 bp = Blueprint ('customers', __name__)
@@ -19,7 +19,7 @@ def index():
 
 @bp.route('/customers/create', methods=["GET", "POST"])
 @login_required
-@customer_admin_required
+@admin_required('is_customer_admin', 'customers.index')
 def create():
         if request.method == "POST":
                 if not Customer.query.filter_by(customer_name = request.form['customer_name']).first():
@@ -48,7 +48,7 @@ def search():
 
 @bp.route('/customers/update/<string:customer_id>', methods = ["GET", "POST"])
 @login_required
-@customer_admin_required
+@admin_required('is_customer_admin', 'customers.index')
 def update(customer_id):
         customer = Customer.query.filter_by(id = customer_id).first()
         if not customer:
@@ -67,7 +67,7 @@ def update(customer_id):
 
 @bp.route('/customers/delete/<string:customer_id>')
 @login_required
-@customer_admin_required
+@admin_required('is_customer_admin', 'customers.index')
 def delete(customer_id):
         customer = Customer.query.filter_by(id = customer_id).first()
         if not customer:
@@ -91,6 +91,7 @@ def customer_jobs(customer_id):
 
 @bp.route('/customers/customer_jobs_add/<string:customer_id>', methods = ["GET", "POST"])
 @login_required
+@admin_required('is_job_admin', 'customers.index')
 def customer_jobs_add(customer_id):
         customer = Customer.query.filter_by(id = customer_id).first()
         if not customer:
@@ -127,24 +128,49 @@ def customer_job_provider_search(customer_id, job_id):
                 Provider.provider_name != search_string,
                 Provider.provider_email.asc()
                 ), page, per_page, 'customers.customer_job_provider_search', customer_id=customer_id, job_id=job_id, search_string=search_string)
-
         return render_template('customers/customer_job_provider_search.html', customer = customer, jobs = [job], providers = providers)
 
 @bp.route('/customers/customer_job_assign_provider/<string:customer_id>/<string:job_id>/<string:provider_id>')
 @login_required
-@customer_admin_required
+@admin_required('is_job_admin', 'customers.index')
 def customer_job_assign_provider(customer_id, job_id, provider_id):
-    job = Job.query.filter_by(id=job_id).first()
-    if not job:
-        flash("Job not found")
+        job = Job.query.filter_by(id=job_id).first()
+        if not job:
+                flash("Job not found")
+                return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
+        provider = Provider.query.filter_by(id=provider_id).first()
+        if not provider:
+                flash("Provider not found")
+                return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
+        job.provider_id = provider_id
+        db.session.add(job)
+        db.session.commit()
+        print(f"Assigning provider {provider_id} to job {job_id}")
+        flash("Provider assigned to job.")
         return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
-    provider = Provider.query.filter_by(id=provider_id).first()
-    if not provider:
-        flash("Provider not found")
+
+@bp.route('/customers/customer_job_remove_provider/<string:customer_id>/<string:job_id>')
+@login_required
+@admin_required('is_job_admin', 'customers.index')
+def customer_job_remove_provider(customer_id, job_id):
+        job = Job.query.filter_by(id=job_id).first()
+        if not job:
+                flash("Job not found")
+                return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
+        job.provider_id = None
+        db.session.add(job)
+        db.session.commit()
         return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
-    job.provider_id = provider_id
-    db.session.add(job)
-    db.session.commit()
-    print(f"Assigning provider {provider_id} to job {job_id}")
-    flash("Provider assigned to job.")
-    return redirect(url_for('customers.customer_jobs', customer_id=customer_id))
+
+@bp.route('/customers/delete_job/<string:customer_id>/<string:job_id>')
+@login_required
+@admin_required('is_job_admin', 'customers.index')
+def delete_job(customer_id, job_id):
+        job = Job.query.filter_by(id = job_id).first()
+        if not job:
+                flash("Job not found")
+                return redirect(url_for('customers.index'))
+        db.session.delete(job)
+        db.session.commit()
+        flash(f"Job {job.id} has been deleted.")
+        return redirect(url_for('customers.customer_jobs', customer_id=customer_id))

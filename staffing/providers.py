@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from datetime import datetime, timezone
-from .auth import login_required, provider_admin_required
+from .auth import login_required, admin_required
 from .models import db, Provider
 
 bp = Blueprint ('providers', __name__)
@@ -19,7 +19,7 @@ def index():
 
 @bp.route('/providers/create', methods=["GET", "POST"])
 @login_required
-@provider_admin_required
+@admin_required('is_provider_admin', 'providers.index')
 def create():
         if request.method == "POST":
                 if not Provider.query.filter_by(provider_email=request.form['provider_email']).first():
@@ -50,7 +50,7 @@ def search():
 
 @bp.route('/providers/update/<string:id>', methods=["GET", "POST"])
 @login_required
-@provider_admin_required
+@admin_required('is_provider_admin', 'providers.index')
 def update(id):
         provider = Provider.query.filter_by(id=id).first()
         if not provider:
@@ -70,7 +70,7 @@ def update(id):
 
 @bp.route('/providers/delete/<string:id>')
 @login_required
-@provider_admin_required
+@admin_required('is_provider_admin', 'providers.index')
 def delete(id):
         provider = Provider.query.filter_by(id=id).first()
         if not provider:

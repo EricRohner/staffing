@@ -10,16 +10,21 @@
         </label>
 
         <label>User admin
-            <input type="checkbox" name="user_admin" id="user_admin" {% if user['is_user_admin'] %}checked{% endif %}>
+            <input type="checkbox" name="user_admin" {% if user['is_user_admin'] %}checked{% endif %}>
         </label>
 
         <label>Provider admin
-            <input type="checkbox" name="provider_admin" id="provider_admin" {% if user['is_provider_admin'] %}checked{% endif %}>
+            <input type="checkbox" name="provider_admin" {% if user['is_provider_admin'] %}checked{% endif %}>
         </label>
 
         <label>Customer admin
-            <input type="checkbox" name="customer_admin" id="customer_admin" {% if user['is_customer_admin'] %}checked{% endif %}>
+            <input type="checkbox" name="customer_admin" {% if user['is_customer_admin'] %}checked{% endif %}>
         </label>
+
+        <label>Job admin
+            <input type="checkbox" name="job_admin" {% if user['is_job_admin'] %}checked{% endif %}>
+        </label>
+
         <div class="container-h">
             <input class="user_btn" type="submit" value="Save">
     </form>

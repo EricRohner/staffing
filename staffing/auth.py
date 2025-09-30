@@ -1,5 +1,5 @@
 import functools
-from flask import Blueprint, flash, session, redirect, render_template, request, url_for
+from flask import Blueprint, flash, session, redirect, render_template, request, url_for, abort
 from .models import User
 
 bp = Blueprint ('auth', __name__)
@@ -23,11 +23,8 @@ def login():
     if not user.check_password(password):
         flash("Incorrect password")
         return redirect(url_for('auth.index'))
-    session['user_name'] = user.user_name
-    session['is_user_admin'] = user.is_user_admin
-    session['is_provider_admin'] = user.is_provider_admin
-    session['is_customer_admin'] = user.is_customer_admin
-
+    for key, value in user.to_dict().items():
+        session[key] = value
     return redirect(url_for("dashboard.index"))
 
 @bp.route('/logout')
@@ -37,7 +34,7 @@ def logout():
     return redirect(url_for('auth.index'))
 
 ############################################################################################
-## Decorators
+## View Decorators
 ############################################################################################
 
 def login_required(view):
@@ -49,29 +46,42 @@ def login_required(view):
         return view(**kwargs)
     return wrapped_view
 
-def user_admin_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if session['is_user_admin'] is not True:
-            flash("You must be a user admin")
-            return redirect(url_for('users.index'))
-        return view(**kwargs)
-    return wrapped_view
+def admin_required(required_role, redirect_to):
+    def decorator(view):
+        @functools.wraps(view)
+        def wrapped_view(**kwargs):
+            if not session.get(required_role, False):
+                flash(f"You do not have required role: {required_role}")
+                return redirect(url_for(redirect_to))
+            return view(**kwargs)
+        return wrapped_view
+    return decorator
 
-def provider_admin_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if session['is_provider_admin'] is not True:
-            flash("You must be a provider admin")
-            return redirect(url_for('providers.index'))
-        return view(**kwargs)
-    return wrapped_view
+############################################################################################
+## API Decorators
+############################################################################################
 
-def customer_admin_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if session['is_customer_admin'] is not True:
-            flash("You must be a customer admin")
-            return redirect(url_for('customers.index'))
-        return view(**kwargs)
-    return wrapped_view
+def require_token_with_role(required_role):
+    def decorator(view):
+        @functools.wraps(view)
+        def wrapped_view(**kwargs):
+            token = request.headers.get('X-API-Token')
+            if not token or '.' not in token:
+                abort(403, description="Missing or malformed token")
+
+            token_id, raw_token = token.split('.', 1)
+            user = User.query.filter_by(api_token_id=token_id).first()
+
+            if not user:
+                abort(403, description="Token ID not found")
+
+            if not user.check_token(raw_token):
+                abort(403, description="Token not accepted")
+
+            if not getattr(user, required_role, False):
+                abort(403, description=f"User does not have required role: {required_role}")
+
+            return view(**kwargs)
+        return wrapped_view
+    return decorator
+

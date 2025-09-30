@@ -5,55 +5,39 @@
 {% endblock %}
 
 {% block body %}  
-        <div class="container-v color1f block fill_w">
-            <form class="color1f" action="{{ url_for('dashboard.self_password_set') }}" method="get">
-                <input class="dash_btn" type="submit" value="Set Password">
-            </form>
+    <div class="container-v color1f block fill_w">
+        <form class="color1f" action="{{ url_for('dashboard.self_password_set') }}" method="get">
+            <input class="dash_btn" type="submit" value="Set Password">
+        </form>
 
-            <form class="color1f" action="{{ url_for('dashboard.get_api_token') }}" method="get">
-                <input class="dash_btn" type="submit" value="Get API token">
-            </form>
+        <form class="color1f" action="{{ url_for('dashboard.get_api_token') }}" method="get">
+            <input class="dash_btn" type="submit" value="Get API token">
+        </form>
 
             
     {% if api_token %}
-    <div class="block color1f">
+    <div class="color1f">
         <div>Your new API token: {{ api_token }}</div>
         <input class="dash_btn" onclick="navigator.clipboard.writeText('{{ api_token }}')" type="submit" value="Copy token to clipboard">
     </div>
     {% endif %}
 
+        {% block pass_form%}
+        {% endblock %}
 
-            {% block pass_form%}
-            {% endblock %}
-
-            {% if session['is_user_admin'] %}
-                <div>
-                    You are a user admin.
-                </div>
-            {% else %}
-                <div>
-                    You are not a user admin.
-                </div>
-            {% endif %}
-            {% if session['is_provider_admin'] %}
-                <div>
-                    You are a provider admin.
-                </div>
-            {% else %}
-                <div>
-                    You are not a provider admin.
-                </div>
-            {% endif %}
-            {% if session['is_customer_admin'] %}
-                <div>
-                    You are a customer admin.
-                </div>
-            {% else %}
-                <div>
-                    You are not a customer admin.
-                </div>
-            {% endif %}
+        <div>
+                You are{% if not session['is_user_admin'] %} not{% endif %} a user admin.
         </div>
+        <div>
+                You are{% if not session['is_provider_admin'] %} not{% endif %} a provider admin.
+        </div>
+        <div>
+                You are{% if not session['is_customer_admin'] %} not{% endif %} a customer admin.
+        </div>
+        <div>
+                You are{% if not session['is_job_admin'] %} not{% endif %} a job admin.
+        </div>
+        
+    </div>
 
 {% endblock %}
-
