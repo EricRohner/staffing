@@ -87,7 +87,10 @@ def customer_jobs(customer_id):
         if not customer:
                 flash("Customer not found")
                 return redirect(url_for('customers.index'))
-        return render_template('customers/customer_jobs.html', customer = customer, jobs = customer.jobs)
+        page = request.args.get('page', 1, type=int)
+        per_page = min(request.args.get('per_page', 10, type=int), 100)
+        jobs = Job.to_collection_dict(Job.query.filter_by(customer_id=customer_id), page, per_page, 'customers.customer_jobs', customer_id=customer_id)
+        return render_template('customers/customer_jobs.html', customer = customer, jobs = jobs)
 
 @bp.route('/customers/customer_jobs_add/<string:customer_id>', methods = ["GET", "POST"])
 @login_required

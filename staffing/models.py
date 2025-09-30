@@ -183,6 +183,7 @@ class Job(paginated_mixin, db.Model):
             'provider_id' : self.provider_id,
             'created' : self.created,
             'last_edited' : self.last_edited,
+            'provider_name': self.provider.provider_name if self.provider else None
         }
         return data
     
