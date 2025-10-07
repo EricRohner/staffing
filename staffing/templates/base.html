@@ -8,7 +8,7 @@
         <title>Staffing</title>
     </head>
     <body>
-        <div class="block color0 fill_w">Staffing management suite</div>
+        <div class="block color0">Staffing management suite</div>
 
         {% for message in get_flashed_messages() %}
             <div class="flash">{{ message }}</div>
@@ -28,7 +28,7 @@
 
             <a class="block color4" href="{{url_for('customers.index')}}">Customers</a>
 
-            <a class="block color0f fill_w" href="{{url_for('auth.logout')}}" class="logout">Log out</a>
+            <a class="block color0f fill_w" href="{{url_for('auth.logout')}}">Log out</a>
             {% endif %}  
         </div>
 

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block head %}
-<div class="big block color1 fill_w">Welcome {{session['user_name']}}</div>
+<div class="big block color1">Welcome {{session['user_name']}}</div>
 {% endblock %}
 
 {% block body %}  
-    <div class="container-v color1f block fill_w">
+    <div class="container-v color1f block">
         <form class="color1f" action="{{ url_for('dashboard.self_password_set') }}" method="get">
             <input class="dash_btn" type="submit" value="Set Password">
         </form>
