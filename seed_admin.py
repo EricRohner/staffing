@@ -14,6 +14,7 @@ with app.app_context():
         admin_user.is_user_admin=True
         admin_user.is_provider_admin=True
         admin_user.is_customer_admin=True
+        admin_user.is_job_admin=True
 
         db.session.add(admin_user)
         db.session.commit()
